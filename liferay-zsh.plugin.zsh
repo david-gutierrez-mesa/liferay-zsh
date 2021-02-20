@@ -2,10 +2,10 @@
 #General variables
 export JIRA_URL="https://issues.liferay.com"
 export USER_HOME="$(echo ~)"
-export L-ZSH_CONFIG_FILE=$USER_HOME/.liferay-zsh.config
+export L_ZSH_CONFIG_FILE=$USER_HOME/.liferay-zsh.config
 
 #Load personal variables
-. $L-ZSH_CONFIG_FILE
+. $L_ZSH_CONFIG_FILE
 
 #IntelliJ IDEA
 IJ_CLONE_PATH="$USER_HOME/Projects/Tools/liferay-intellij"
