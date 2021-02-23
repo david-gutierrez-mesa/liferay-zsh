@@ -1,0 +1,8 @@
+# Jira
+function jiraGetIssueSummary() {
+	local LPS_ID=$1
+	if [ -z "$1" ]; then
+		LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
+	fi
+	echo "$(jira show $LPS_ID)" | grep Summary | sed 's/^.\{23\}//' | sed 's/.\{2\}$//'
+}
