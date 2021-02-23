@@ -27,6 +27,9 @@ export PATH_TO_TOMCAT_BIN_FOLDER="$PATH_TO_BUNDLES/$TOMCAT_VERSION/bin"
 alias sf="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-current-branch && cd $PATH_TO_PORTAL/"
 alias sf_local_changes="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-local-changes & cd $PATH_TO_PORTAL/"
 
+fpath=( "${ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}" )
+autoload -Uz $fpath[1]/*(.:t)
+
 # Poshi
 alias poshiValidation="ant -f build-test.xml run-poshi-validation"
 
@@ -112,15 +115,6 @@ function runIntegrationTest() {
 	if [ ! -z "$2" ]; then
 		cd $PATH_TO_PORTAL/
         fi
-}
-
-# Jira
-function jiraGetIssueSummary() {
-	local LPS_ID=$1
-	if [ -z "$1" ]; then
-		LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
-	fi
-	echo "$(jira show $LPS_ID)" | grep Summary | sed 's/^.\{23\}//' | sed 's/.\{2\}$//'
 }
 
 # Git
