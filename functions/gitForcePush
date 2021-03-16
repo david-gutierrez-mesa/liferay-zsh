@@ -1,0 +1,45 @@
+gitForcePush() {
+  if [ -z "$(git status --porcelain)" ]; then
+    local BRANCH_NAME
+    while [ "$1" != "" ]; do
+      case $1 in
+      -h | -help)
+        _showHelp
+        return 0
+        ;;
+      -b)
+        shift
+        BRANCH_NAME="$1"
+        ;;
+      *)
+        echo "Invalid option"
+        _showHelp
+        return 0
+        ;;
+      esac
+      shift
+    done
+    if [ -z "$BRANCH_NAME" ]; then
+      BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD | cut -d " " -f 1)
+    fi
+    poshiSFCommit || {
+      echo 'Impossible to commit. Source Formated failed'
+      return 0
+    }
+    echo "Force pushing branch $BRANCH_NAME"
+    git push --set-upstream -f origin "$BRANCH_NAME"
+  else
+    echo "You have uncommited changes. Commit before try to send"
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "$ZSH_ARGZERO [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,   Show brief help"
+  echo "-b,           Branch to be forced commited. If not set, current on is commited"
+}
+
+gitForcePush "$@"
