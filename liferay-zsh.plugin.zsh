@@ -360,9 +360,9 @@ function gitRebaseBriansContinueAndSendPR() {
 }
 
 # Eng
-alias updateGitLiferay="cd $PATH_TO_PORTAL/ && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
+alias updateGitLiferay="cd $PATH_TO_PORTAL/ && gitClean && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
 
-alias updateGitLiferayEE="cd $PATH_TO_DXP_PORTAL/ && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
+alias updateGitLiferayEE="cd $PATH_TO_DXP_PORTAL/ && gitClean && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
 
 alias mountBundleCE="cd $PATH_TO_PORTAL/ && rm -rf ../bundles && ant setup-profile-portal && ant all && cp ../util-files/test.$USER.properties ./ && gitClean && ij"
 
@@ -370,7 +370,7 @@ alias updateBundleCE="cd $PATH_TO_PORTAL/ && ant all && cp ../util-files/test.$U
 
 alias mountBundleEE="cd $PATH_TO_DXP_PORTAL/ && rm -rf ../bundles && ant setup-profile-dxp && ant all && cp ../util-files/test.$USER.properties ./ && gitClean && ij"
 
-alias startLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh run"
+alias startLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh jpda run"
 
 alias stopLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh stop && cd $PATH_TO_LIFERAY_MAIN"
 
