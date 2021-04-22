@@ -1,0 +1,4 @@
+# alias gitClean="git clean -fd && git reset --hard"
+function gitClean() {
+  git clean -fd && git reset --hard
+}

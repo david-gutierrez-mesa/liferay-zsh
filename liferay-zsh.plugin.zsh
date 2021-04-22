@@ -2,16 +2,13 @@
 export JIRA_URL="https://issues.liferay.com"
 export USER_HOME="$(echo ~)"
 export L_ZSH_CONFIG_FILE=$USER_HOME/.liferay-zsh.config
+export LIFERAY_ZSH_INSTALLATION_PATH="${0%/*}"
 
 #Load personal variables
 . $L_ZSH_CONFIG_FILE
 
-#IntelliJ IDEA
-IJ_CLONE_PATH="$USER_HOME/Projects/Tools/liferay-intellij"
-
-ij() {
-  ${IJ_CLONE_PATH}/intellij "$@"
-}
+#ANT
+export ANT_OPTS="-Xmx2560m"
 
 # JIRA
 export JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
@@ -19,8 +16,16 @@ export JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
 # LIFERAY
 export TOMCAT_VERSION="tomcat-9.0.43"
 export PATH_TO_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal"
+export PATH_TO_DXP_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal-ee"
 export PATH_TO_BUNDLES="$PATH_TO_LIFERAY_MAIN/bundles"
 export PATH_TO_TOMCAT_BIN_FOLDER="$PATH_TO_BUNDLES/$TOMCAT_VERSION/bin"
+
+#IntelliJ IDEA
+IJ_CLONE_PATH="$PATH_TO_LIFERAY_MAIN/liferay-intellij"
+
+ij() {
+  ${IJ_CLONE_PATH}/intellij "$@"
+}
 
 # PR
 alias sf="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-current-branch && cd $PATH_TO_PORTAL/"
@@ -124,7 +129,6 @@ function runIntegrationTest() {
 alias gs="git status"
 alias gl="git log"
 
-alias gitClean="git clean -fd && git reset --hard"
 alias gitMaster="git checkout master"
 alias gitRebase="git rebase upstream/master"
 alias gitRebaseBrian="git rebase brian/master"
@@ -364,11 +368,13 @@ alias updateGitLiferay="cd $PATH_TO_PORTAL/ && gitClean && gco master && gcxdf &
 
 alias updateGitLiferayEE="cd $PATH_TO_DXP_PORTAL/ && gitClean && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
 
-alias mountBundleCE="cd $PATH_TO_PORTAL/ && rm -rf ../bundles && ant setup-profile-portal && ant all && cp ../util-files/test.$USER.properties ./ && gitClean && ij"
+alias mountBundleCE="mountBundle"
 
-alias updateBundleCE="cd $PATH_TO_PORTAL/ && ant all && cp ../util-files/test.$USER.properties ./ && gitClean && ij"
+alias mountBundleEE="mountBundle -dxp"
 
-alias mountBundleEE="cd $PATH_TO_DXP_PORTAL/ && rm -rf ../bundles && ant setup-profile-dxp && ant all && cp ../util-files/test.$USER.properties ./ && gitClean && ij"
+alias updateBundleCE="mountBundle -u"
+
+alias updateBundleEE="mountBundle -dxp -u"
 
 alias startLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh jpda run"
 
@@ -379,6 +385,8 @@ alias updateCleanBundleCEStartLiferay="updateGitLiferay && mountBundleCE && star
 alias updateCleanBundleEEStartLiferay="updateGitLiferayEE && mountBundleEE && startLiferay"
 
 alias updateCEStartLiferay="updateGitLiferay && updateBundleCE && startLiferay"
+
+alias updateEEStartLiferay="updateGitLiferayEE && updateBundleEE && startLiferay"
 
 alias restartLiferay="stopLiferay && startLiferay"
 

@@ -1,0 +1,52 @@
+function mountBundle() {
+  local deploy_DXP="false"
+  local deleteBundle="true"
+  while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    -dxp)
+      shift
+      deploy_DXP="true"
+      ;;
+    -u)
+      shift
+      deleteBundle="false"
+      ;;
+    esac
+    shift
+  done
+
+  if [ "$deploy_DXP" = "false" ]; then
+    cd $PATH_TO_PORTAL/
+  else
+    cd $PATH_TO_DXP_PORTAL/
+  fi
+  if [ "$deleteBundle" = "true" ]; then
+    rm -rf ../bundles
+  fi
+
+  if [ "$deploy_DXP" = "false" ]; then
+    ant setup-profile-portal
+  else
+    ant setup-profile-dxp
+  fi
+  ant all
+  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties"
+  gitClean
+  ij
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,     Show brief help"
+  echo "-dxp,           Mount DXp bundle instead of CE one"
+  echo "-u,             Update exiting mounted bundle"
+}
+
+mountBundle "$@"
