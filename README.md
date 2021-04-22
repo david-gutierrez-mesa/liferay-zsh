@@ -1,8 +1,26 @@
 # liferay-zsh
 ## Description
-Oh my zsh plugins for Liferay development
+Oh my zsh plugin with scripts for Liferay development
 
-## liferay-zsh instalación
+## Preconditions
+### Oh-My-ZSH
+https://github.com/ohmyzsh/ohmyzsh
+
+### Node GH
+http://nodegh.io/
+
+### Liferay projects
+Download in $PATH_TO_LIFERAY_MAIN
+* Your personal fork of https://github.com/liferay/liferay-portal
+* Your personal fork of https://github.com/liferay/liferay-portal-ee
+* https://github.com/holatuwol/liferay-intellij
+
+### Set upstream and brianchandotcom
+For that just run:
+> git remote add upstream https://github.com/liferay/liferay-portal.git <br/>
+> git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal.git
+
+## liferay-zsh installation
 
 Create a custom folder to place your ZSH customisations. Then Create a plugins directory inside your custom directory.
 
@@ -30,9 +48,13 @@ Move $ZSH_CUSTOM/plugins/liferay-zsh/.liferay-zsh.conf file to /Users/{youruser}
 
 Edit /Users/{youruser}/ .liferay-zsh.conf and fill al the variables there.
 
-Note: to generate a token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
+**Note:** to generate a token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 
 Reload zsh by typing 'zsh' in your terminal
 
 ## References
 https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#adding-a-new-plugin
+
+https://github.com/ohmyzsh/ohmyzsh
+
+http://nodegh.io/
