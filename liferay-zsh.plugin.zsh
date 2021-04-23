@@ -13,6 +13,9 @@ export ANT_OPTS="-Xmx2560m"
 # JIRA
 export JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
 
+# JAVA
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
 # LIFERAY
 export TOMCAT_VERSION="tomcat-9.0.43"
 export PATH_TO_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal"
