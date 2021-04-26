@@ -34,13 +34,15 @@ ij() {
 alias sf="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-current-branch && cd $PATH_TO_PORTAL/"
 alias sf_local_changes="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-local-changes & cd $PATH_TO_PORTAL/"
 
+# Testing tools
+alias testrayResultsFromPR="${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tools/testray.py"
+
 #Load functions
 fpath=("${ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
 autoload -Uz $fpath[1]/*(.:t)
 
 # Poshi
 alias poshiValidation="ant -f build-test.xml run-poshi-validation"
-
 alias poshiSF="sf && cd $PATH_TO_PORTAL/modules/ && ../gradlew -b util.gradle formatSourceCurrentBranch && cd .. && poshiValidation"
 
 function poshiSFCommit() {
@@ -88,8 +90,6 @@ function openPoshiResults() {
 }
 
 # Integration
-# alias deployModule="gw clean deploy"
-
 function deployModule() {
   if [ -z "$1" ]; then
     gw clean deploy
