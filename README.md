@@ -25,6 +25,10 @@ For that just run:
 > git remote add upstream https://github.com/liferay/liferay-portal.git <br/>
 > git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal.git
 
+### Dependencies for testray.py
+> sudo pip install requests<br/>
+> sudo pip install keyring
+
 ## liferay-zsh installation
 
 Create a custom folder to place your ZSH customisations. Then Create a plugins directory inside your custom directory.
