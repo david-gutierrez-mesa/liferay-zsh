@@ -1,0 +1,5 @@
+function gitPush() {
+  local CURRENT_BRANCH
+  CURRENT_BRANCH=$(git branch --show-current)
+  git push --set-upstream origin "$CURRENT_BRANCH"
+}

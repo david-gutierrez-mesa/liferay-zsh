@@ -1,7 +1,7 @@
 gitSendTo() {
   local runSF="true"
   local updatePullRequest="true"
-  local updateJira="true"
+  local updateJira="false"
   local username
   while [ "$1" != "" ]; do
     case $1 in
@@ -16,8 +16,8 @@ gitSendTo() {
     -supr | -skipUpdatePullRequest)
       updatePullRequest="false"
       ;;
-    -suj | -skipUpdateJiraIssue)
-      updateJira="false"
+    -suj | -updateJiraIssue)
+      updateJira="true"
       ;;
     -ssf | -skipSF)
       runSF="false"
@@ -82,8 +82,8 @@ _showHelp() {
   echo "-h | -help,                     Show brief help"
   echo "-u,                             Git use to send the PR. Mandatory"
   echo "-supr | -supdatePullRequest,    Don't update PR with info get from LPS extracted from last commit"
-  echo "-suj | -skipUpdateJiraIssue,    Skip the update of Jira ticket from last commit. If you have more than one LPS you must update the other manually"
-  echo "-ssf | -skipSF,                 Skip Poshi validation and Source Formater"
+  echo "-suj | -updateJiraIssue,        Update of Jira ticket from last commit. If you have more than one LPS in your commits you must update the other ones manually"
+  echo "-ssf | -skipSF,                 Skip Poshi validation and Source Formatter"
 }
 
 gitSendTo "$@"
