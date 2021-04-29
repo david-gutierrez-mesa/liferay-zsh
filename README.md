@@ -29,6 +29,17 @@ For that just run:
 > sudo pip install requests<br/>
 > sudo pip install keyring
 
+### jira-cli
+This is necessary if you want to update jira from commands like [gitSendTo](https://github.com/david-gutierrez-mesa/liferay-zsh/blob/master/functions/gitSendTo)
+
+Install it with 
+> npm install -g jira-cli 
+
+Configure it with
+> sudo jira config
+
+**More info in** https://www.npmjs.com/package/jira-cli
+
 ## liferay-zsh installation
 
 Create a custom folder to place your ZSH customisations. Then Create a plugins directory inside your custom directory.
