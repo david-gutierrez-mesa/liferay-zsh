@@ -26,12 +26,15 @@ function mountBundle() {
   fi
   if [ "$deleteBundle" = "true" ]; then
     rm -rf ../bundles
+    echo "Deleting /bundles folder"
   fi
 
   if [ "$deploy_DXP" = "false" ]; then
     ant setup-profile-portal
+    echo "Deploying Liferay Community Edition"
   else
     ant setup-profile-dxp
+    echo "Deploying Liferay DXP Edition"
   fi
   ant all
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties"
