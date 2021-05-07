@@ -1,0 +1,4 @@
+function mysqlRecreateDataBase {
+    mysqlDeleteDataBase
+    mysqlCreateDataBase
+}

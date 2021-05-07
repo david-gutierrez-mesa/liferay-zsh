@@ -1,0 +1,3 @@
+function mysqlDeleteDataBase {
+    mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "drop database $PORTAL_DATABASE_NAME;"
+}

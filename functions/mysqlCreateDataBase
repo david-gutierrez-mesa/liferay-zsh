@@ -1,0 +1,3 @@
+function mysqlCreateDataBase {
+    mysql -u $MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE $PORTAL_DATABASE_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
+}

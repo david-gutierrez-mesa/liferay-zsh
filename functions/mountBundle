@@ -1,6 +1,7 @@
 function mountBundle() {
   local deploy_DXP="false"
   local deleteBundle="true"
+  local useHSQL="false"
   while [ "$1" != "" ]; do
     case $1 in
     -h | -help)
@@ -11,6 +12,10 @@ function mountBundle() {
       shift
       deploy_DXP="true"
       ;;
+    -hsql)
+      shift
+      useHSQL="true"
+      ;;
     -u)
       shift
       deleteBundle="false"
@@ -20,9 +25,9 @@ function mountBundle() {
   done
 
   if [ "$deploy_DXP" = "false" ]; then
-    cd $PATH_TO_PORTAL/
+    cd "$PATH_TO_PORTAL/" || return
   else
-    cd $PATH_TO_DXP_PORTAL/
+    cd "$PATH_TO_DXP_PORTAL/" || return
   fi
   if [ "$deleteBundle" = "true" ]; then
     rm -rf ../bundles
@@ -37,7 +42,14 @@ function mountBundle() {
     echo "Deploying Liferay DXP Edition"
   fi
   ant all
+  if [ "$useHSQL" = "false" ]; then
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-ext.properties"  "$PATH_TO_BUNDLES/portal-ext.properties"
+    sed -i '' "s/%JDBC_USER%/$MYSQL_USER/g" "$PATH_TO_BUNDLES/portal-ext.properties"
+    sed -i '' "s/%JDBC_PASSWORD%/$MYSQL_PASSWORD/g" "$PATH_TO_BUNDLES/portal-ext.properties"
+  fi
+  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-setup-wizard.properties" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties"
+  sed -i '' "s+%PATH_BUNDLES%+$PATH_TO_BUNDLES+g" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
   gitClean
   ij
 }
@@ -49,6 +61,7 @@ _showHelp() {
   echo "options:"
   echo "-h | -help,     Show brief help"
   echo "-dxp,           Mount DXp bundle instead of CE one"
+  echo "-hsql,          Use hsql data base instead of MySQL"
   echo "-u,             Update exiting mounted bundle"
 }
 
