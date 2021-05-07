@@ -30,8 +30,9 @@ function mountBundle() {
     cd "$PATH_TO_DXP_PORTAL/" || return
   fi
   if [ "$deleteBundle" = "true" ]; then
+    echo "Deleting /bundles folder and cleaning DB"
     rm -rf ../bundles
-    echo "Deleting /bundles folder"
+    mysqlRecreateDataBase
   fi
 
   if [ "$deploy_DXP" = "false" ]; then
