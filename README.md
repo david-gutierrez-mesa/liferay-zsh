@@ -40,6 +40,11 @@ Configure it with
 
 **More info in** https://www.npmjs.com/package/jira-cli
 
+### MySQL
+Install it from here https://dev.mysql.com/downloads/file/?id=503070
+
+Set same user and password you have in your .liferay-zsh.config file
+
 ## liferay-zsh installation
 
 Create a custom folder to place your ZSH customisations. Then Create a plugins directory inside your custom directory.

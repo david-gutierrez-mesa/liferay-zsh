@@ -1,6 +1,7 @@
 #General variables
 export JIRA_URL="https://issues.liferay.com"
-export USER_HOME="$(echo ~)"
+export ="$(echo ~)"
+export USER_HOME
 export L_ZSH_CONFIG_FILE=$USER_HOME/.liferay-zsh.config
 export LIFERAY_ZSH_INSTALLATION_PATH="${0%/*}"
 
@@ -11,10 +12,12 @@ export LIFERAY_ZSH_INSTALLATION_PATH="${0%/*}"
 export ANT_OPTS="-Xmx2560m"
 
 # JIRA
-export JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
+JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
+export JIRA_CONFIG
 
 # JAVA
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+export JAVA_HOME
 
 # LIFERAY
 export TOMCAT_VERSION="tomcat-9.0.43"
@@ -22,6 +25,11 @@ export PATH_TO_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal"
 export PATH_TO_DXP_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal-ee"
 export PATH_TO_BUNDLES="$PATH_TO_LIFERAY_MAIN/bundles"
 export PATH_TO_TOMCAT_BIN_FOLDER="$PATH_TO_BUNDLES/$TOMCAT_VERSION/bin"
+export PORTAL_DATABASE_NAME="lportal"
+
+# MySql
+export MYSQL_HOME="/usr/local/mysql"
+export PATH=$MYSQL_HOME/bin:$PATH
 
 #IntelliJ IDEA
 IJ_CLONE_PATH="$PATH_TO_LIFERAY_MAIN/liferay-intellij"
@@ -31,11 +39,11 @@ ij() {
 }
 
 # PR
-alias sf="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-current-branch && cd $PATH_TO_PORTAL/"
-alias sf_local_changes="cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-local-changes & cd $PATH_TO_PORTAL/"
+alias sf='cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-current-branch && cd $PATH_TO_PORTAL/'
+alias sf_local_changes='cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-local-changes & cd $PATH_TO_PORTAL/'
 
 # Testing tools
-alias testrayResultsFromPR="${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tools/testray.py"
+alias testrayResultsFromPR='${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tools/testray.py'
 
 #Load functions
 fpath=("${ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
@@ -43,7 +51,7 @@ autoload -Uz $fpath[1]/*(.:t)
 
 # Poshi
 alias poshiValidation="ant -f build-test.xml run-poshi-validation"
-alias poshiSF="sf && cd $PATH_TO_PORTAL/modules/ && ../gradlew -b util.gradle formatSourceCurrentBranch && cd .. && poshiValidation"
+alias poshiSF='sf && cd $PATH_TO_PORTAL/modules/ && ../gradlew -b util.gradle formatSourceCurrentBranch && cd .. && poshiValidation'
 
 function poshiSFCommit() {
   if [ -z "$(git status --porcelain)" ]; then
@@ -391,7 +399,7 @@ alias updateCEStartLiferay="updateGitLiferay && updateBundleCE && startLiferay"
 
 alias updateEEStartLiferay="updateGitLiferayEE && updateBundleEE && startLiferay"
 
-alias restartLiferay="stopLiferay && startLiferay"
+alias restartLiferay="stopLiferay && sleep 300 && startLiferay"
 
 function updateAndDeployExistingBranch() {
   updateGitLiferay && git checkout $1 && git rebase upstream/master && mountBundleCE && startLiferay
