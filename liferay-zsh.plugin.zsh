@@ -1,7 +1,6 @@
 #General variables
 export JIRA_URL="https://issues.liferay.com"
-export ="$(echo ~)"
-export USER_HOME
+export USER_HOME="$(echo ~)"
 export L_ZSH_CONFIG_FILE=$USER_HOME/.liferay-zsh.config
 export LIFERAY_ZSH_INSTALLATION_PATH="${0%/*}"
 
