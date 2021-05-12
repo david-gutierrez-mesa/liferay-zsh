@@ -1,0 +1,9 @@
+function gitCheckoutAndRebase() {
+ if [ -z "$1" ]; then
+    echo "Add a branch to checkout"
+    echo " "
+    return 0
+  fi
+  git checkout "$1"
+  gitRebase
+}
