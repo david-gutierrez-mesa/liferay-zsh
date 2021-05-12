@@ -1,0 +1,8 @@
+function gitNewBranch() {
+ if [ -z "$1" ]; then
+    echo "Add a branch name"
+    echo " "
+    return 0
+  fi
+  git checkout -b "$1"
+}

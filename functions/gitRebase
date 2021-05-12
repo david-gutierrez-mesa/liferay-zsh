@@ -1,0 +1,3 @@
+function gitRebase() {
+  git rebase upstream/master
+}

@@ -140,7 +140,6 @@ alias gs="git status"
 alias gl="git log"
 
 alias gitMaster="git checkout master"
-alias gitRebase="git rebase upstream/master"
 alias gitRebaseBrian="git rebase brian/master"
 alias gitRebaseAbort="git rebase --abort && unset PR_NUMBER"
 alias gitRebaseContinue="git rebase --continue"
@@ -172,7 +171,7 @@ alias gitSendToMe="gitSendTo -u $GITHUB_USER"
 alias gitSendToBrian="gitSendTo -u brianchandotcom -suj"
 alias gitSendToEchoUser="gitSendTo -u liferay-echo"
 
-alias gitGetFromEchouser="gh pr -u liferay-echo"
+alias gitGetFromEchoUser="gh pr -u liferay-echo"
 
 function gitGetPRTitle() {
   if [ -z "$1" ]; then
@@ -182,8 +181,9 @@ function gitGetPRTitle() {
     if [ -n "$2" ]; then
       FROM_USER=$2
     fi
-    local PR_TITLE=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed -n 1p | cut -d'@' -f 1 | sed "s/^[^ ]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
-    echo $PR_TITLE
+    local PR_TITLE
+    PR_TITLE=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed -n 1p | cut -d'@' -f 1 | sed "s/^[^ ]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+    echo "$PR_TITLE"
   fi
 }
 
@@ -195,8 +195,9 @@ function gitGetPRSender() {
     if [ -n "$2" ]; then
       FROM_USER=$2
     fi
-    local PR_SENDER=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed -n 1p | cut -d'(' -f 1 | sed "s/^[^@]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
-    echo $PR_SENDER
+    local PR_SENDER
+    PR_SENDER=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed -n 1p | cut -d'(' -f 1 | sed "s/^[^@]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+    echo "$PR_SENDER"
   fi
 }
 
@@ -208,8 +209,9 @@ function gitGetPRMessage() {
     if [ -n "$2" ]; then
       FROM_USER=$2
     fi
-    local PR_MESSAGE=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed '1d' | grep -v '^Mergeable' | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
-    echo $PR_MESSAGE
+    local PR_MESSAGE
+    PR_MESSAGE=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed '1d' | grep -v '^Mergeable' | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+    echo "$PR_MESSAGE"
   fi
 }
 
@@ -217,8 +219,10 @@ function gitGetPRMessageWitSender() {
   if [ -z "$1" ]; then
     echo "Enter a PR number"
   else
-    local PR_MESSAGE=$(gitGetPRMessage $1 $2)
-    local PR_SENDER=$(gitGetPRSender $1 $2)
+    local PR_MESSAGE
+    PR_MESSAGE=$(gitGetPRMessage $1 $2)
+    local PR_SENDER
+    PR_SENDER=$(gitGetPRSender $1 $2)
     echo "$PR_MESSAGE\ncc/ $PR_SENDER"
   fi
 }
@@ -267,7 +271,8 @@ function gitGetRebaseAndSendPR() {
       return
     }
     echo "Sending to me"
-    local PR_TITLE=$(gitGetPRTitle $PR_NUMBER $FROM_USER)
+    local PR_TITLE
+    PR_TITLE=$(gitGetPRTitle $PR_NUMBER $FROM_USER)
     local PR_MESSAGE=""
     if [ "$FROM_USER" = "$GITHUB_USER" ]; then
       PR_MESSAGE=$(gitGetPRMessage $PR_NUMBER $FROM_USER)
@@ -275,7 +280,8 @@ function gitGetRebaseAndSendPR() {
       PR_MESSAGE=$(gitGetPRMessageWitSender $PR_NUMBER $FROM_USER)
     fi
     gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
-    local OPENED_PR=$(gitGetLastPRnumber)
+    local OPENED_PR
+    OPENED_PR=$(gitGetLastPRnumber)
     gitCloseRebasedPR $PR_NUMBER $OPENED_PR $FROM_USER
     git checkout pr-$PR_NUMBER
     unset PR_NUMBER
