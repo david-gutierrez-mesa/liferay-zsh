@@ -20,12 +20,19 @@ Download in $PATH_TO_LIFERAY_MAIN
 * Your personal fork of https://github.com/liferay/liferay-portal-ee
 * https://github.com/holatuwol/liferay-intellij
 
-### Set upstream and brianchandotcom
-For that just run:
+### Set upstream and brianchandotcom for liferay-portal
+For that just enter in liferay-portal fodler and run:
 > git remote add upstream https://github.com/liferay/liferay-portal.git <br/>
 > git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal.git
 
 ### Dependencies for testray.py
+#### Install python (if you don't have it)
+> brew install python
+
+#### Install pip
+> sudo easy_install pip
+
+#### Install requests and keyring
 > sudo pip install requests<br/>
 > sudo pip install keyring
 
@@ -59,12 +66,11 @@ Your file tree should look like this:
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── liferay-zsh<br/>
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── liferay-zsh.plugin.zsh
 
-Set ZSH_CUSTOM value to your custom folder and add liferay-zsh plugin in
-* Edit file 
+Set ZSH_CUSTOM value to your custom folder and add liferay-zsh plugin in ~/.zshrc file
+* Edit file ~/.zshrc
 * Set ZSH_CUSTOM value to your custom folder
 * Uncomment line that has ZSH_CUSTOM
 * To change default value for your path
-* Add liferay-zsh plug in
 * Add liferay-zsh into the line that starts with plugins=
 * Example plugins=(git bundler liferay-zsh)
 * Save
