@@ -14,6 +14,9 @@ https://github.com/ohmyzsh/ohmyzsh
 ### Node GH
 http://nodegh.io/
 
+### GNU-sed
+> brew install gnu-sed
+
 ### Liferay projects
 Download in $PATH_TO_LIFERAY_MAIN
 * Your personal fork of https://github.com/liferay/liferay-portal
