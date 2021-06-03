@@ -20,7 +20,7 @@ def getTestrayLinks(url):
     if "TESTRAY_USER" in os.environ:
         username = os.environ['TESTRAY_USER']
     else:
-        print "No user for testray access set as environment variable. Please set one."
+        print ("No user for testray access set as environment variable. Please set one.")
         username = raw_input("Username: ")
         os.environ['TESTRAY_USER'] = username
 
