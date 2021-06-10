@@ -70,7 +70,7 @@ gitSendTo() {
       echo "Skipping Jira Issue update"
     fi
   else
-    echo "You have uncommited changes. Commit before try to send"
+    echo "You have uncommitted changes. Commit before try to send"
   fi
 }
 

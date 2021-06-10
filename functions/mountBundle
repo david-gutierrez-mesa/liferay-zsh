@@ -20,6 +20,11 @@ function mountBundle() {
       shift
       deleteBundle="false"
       ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
     esac
     shift
   done
@@ -61,7 +66,7 @@ _showHelp() {
   echo " "
   echo "options:"
   echo "-h | -help,     Show brief help"
-  echo "-dxp,           Mount DXp bundle instead of CE one"
+  echo "-dxp,           Mount DXP bundle instead of CE one"
   echo "-hsql,          Use hsql data base instead of MySQL"
   echo "-u,             Update exiting mounted bundle"
 }

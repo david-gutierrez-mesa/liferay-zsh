@@ -1,4 +1,45 @@
 # alias gitClean="git clean -fd && git reset --hard"
 function gitClean() {
-  git clean -fd && git reset --hard
+  local hardReset="false"
+  while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    -hr | -hardreset)
+      shift
+      hardReset="true"
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+  if [ ! -z "$(git status --porcelain)" ] && [ "$hardReset" = "false" ]; then
+    echo "Stashing changes in branch"
+    git stash push
+  fi
+
+  git clean -fd
+
+  if [ "$hardReset" = "true" ]; then
+    echo "Performing a hard reset"
+    git reset --hard
+  fi
+
 }
+
+_showHelp() {
+  echo "Function help:"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,       Show brief help"
+  echo "-hr | -hardreset, Also perform hard Reset instead of a stash"
+}
+
+gitClean "$@"

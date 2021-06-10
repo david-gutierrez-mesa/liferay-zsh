@@ -139,12 +139,9 @@ function runIntegrationTest() {
 alias gs="git status"
 alias gl="git log"
 
-alias gitMaster="git checkout master"
 alias gitRebaseBrian="git rebase brian/master"
 alias gitRebaseAbort="git rebase --abort && unset PR_NUMBER"
 alias gitRebaseContinue="git rebase --continue"
-
-alias gcxdf="git clean -xdf -e '**/*.iml' -e '.gradle/gradle.properties' -e '.idea' -e '.m2' -e \"app.server.$USER.properties\" -e \"build.$USER.properties\""
 
 function gitDeleteRemoteBranch() {
   local BRANCH_TO_DELETE=$1
@@ -380,32 +377,16 @@ function gitRebaseBriansContinueAndSendPR() {
 }
 
 # Eng
-alias updateGitLiferay="cd $PATH_TO_PORTAL/ && gitClean && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
-
-alias updateGitLiferayEE="cd $PATH_TO_DXP_PORTAL/ && gitClean && gco master && gcxdf && git fetch upstream master && git pull upstream master && git push origin head"
-
-alias mountBundleCE="mountBundle"
-
-alias mountBundleEE="mountBundle -dxp"
-
-alias updateBundleCE="mountBundle -u"
-
-alias updateBundleEE="mountBundle -dxp -u"
-
 alias startLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh jpda run"
 
 alias stopLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh stop && cd $PATH_TO_LIFERAY_MAIN"
 
-alias updateCleanBundleCEStartLiferay="updateGitLiferay && mountBundleCE && startLiferay"
+alias updateCleanBundleCEStartLiferay="updateGitLiferay && mountBundle && startLiferay"
 
-alias updateCleanBundleEEStartLiferay="updateGitLiferayEE && mountBundleEE && startLiferay"
+alias updateCleanBundleEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp && startLiferay"
 
-alias updateCEStartLiferay="updateGitLiferay && updateBundleCE && startLiferay"
+alias updateCEStartLiferay="updateGitLiferay && mountBundle -u && startLiferay"
 
-alias updateEEStartLiferay="updateGitLiferayEE && updateBundleEE && startLiferay"
+alias updateEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -u && startLiferay"
 
 alias restartLiferay="stopLiferay && sleep 300 && startLiferay"
-
-function updateAndDeployExistingBranch() {
-  updateGitLiferay && git checkout $1 && git rebase upstream/master && mountBundleCE && startLiferay
-}
