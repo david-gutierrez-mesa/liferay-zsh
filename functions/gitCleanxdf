@@ -1,0 +1,3 @@
+function gitCleanxdf() {
+  git clean -xdf -e '**/*.iml' -e '.gradle/gradle.properties' -e '.idea' -e '.m2' -e \"app.server.$USER.properties\" -e \"build.$USER.properties\"
+}
