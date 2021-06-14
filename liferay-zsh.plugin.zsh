@@ -37,10 +37,6 @@ ij() {
   ${IJ_CLONE_PATH}/intellij "$@"
 }
 
-# PR
-alias sf='cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-current-branch && cd $PATH_TO_PORTAL/'
-alias sf_local_changes='cd $PATH_TO_PORTAL/portal-impl/ && ant format-source-local-changes & cd $PATH_TO_PORTAL/'
-
 # Testing tools
 alias testrayResultsFromPR='python ${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tools/testray.py'
 
@@ -49,29 +45,6 @@ fpath=("${ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
 autoload -Uz $fpath[1]/*(.:t)
 
 # Poshi
-alias poshiValidation="ant -f build-test.xml run-poshi-validation"
-alias poshiSF='sf && cd $PATH_TO_PORTAL/modules/ && ../gradlew -b util.gradle formatSourceCurrentBranch && cd .. && poshiValidation'
-
-function poshiSFCommit() {
-  if [ -z "$(git status --porcelain)" ]; then
-    poshiSF || {
-      echo 'Source Formated failed. Check logs and fix'
-      exit 1
-    }
-    if [ -z "$(git status --porcelain)" ]; then
-      echo "There are not Source Formated changes to commit"
-    else
-      local LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
-      local message=$(echo $LPS_ID SF)
-      git add .
-      git commit -m "$message"
-      echo "Source formated comited as $message"
-    fi
-  else
-    echo "You have uncommited changes. Commit before do Source Formater"
-  fi
-}
-
 function runPoshiTest() {
   cd $PATH_TO_PORTAL/
   ant -f build-test.xml run-selenium-test -Dtest.class=$1
@@ -170,121 +143,6 @@ alias gitSendToEchoUser="gitSendTo -u liferay-echo"
 
 alias gitGetFromEchoUser="gh pr -u liferay-echo"
 
-function gitGetPRTitle() {
-  if [ -z "$1" ]; then
-    echo "Enter a PR number"
-  else
-    local FROM_USER=$GITHUB_USER
-    if [ -n "$2" ]; then
-      FROM_USER=$2
-    fi
-    local PR_TITLE
-    PR_TITLE=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed -n 1p | cut -d'@' -f 1 | sed "s/^[^ ]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
-    echo "$PR_TITLE"
-  fi
-}
-
-function gitGetPRSender() {
-  if [ -z "$1" ]; then
-    echo "Enter a PR number"
-  else
-    local FROM_USER=$GITHUB_USER
-    if [ -n "$2" ]; then
-      FROM_USER=$2
-    fi
-    local PR_SENDER
-    PR_SENDER=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed -n 1p | cut -d'(' -f 1 | sed "s/^[^@]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
-    echo "$PR_SENDER"
-  fi
-}
-
-function gitGetPRMessage() {
-  if [ -z "$1" ]; then
-    echo "Enter a PR number"
-  else
-    local FROM_USER=$GITHUB_USER
-    if [ -n "$2" ]; then
-      FROM_USER=$2
-    fi
-    local PR_MESSAGE
-    PR_MESSAGE=$(gh pr -u $FROM_USER --info $1 2>/dev/null | sed '1d' | grep -v '^Mergeable' | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
-    echo "$PR_MESSAGE"
-  fi
-}
-
-function gitGetPRMessageWitSender() {
-  if [ -z "$1" ]; then
-    echo "Enter a PR number"
-  else
-    local PR_MESSAGE
-    PR_MESSAGE=$(gitGetPRMessage $1 $2)
-    local PR_SENDER
-    PR_SENDER=$(gitGetPRSender $1 $2)
-    echo "$PR_MESSAGE\ncc/ $PR_SENDER"
-  fi
-}
-
-function gitCloseRebasedPR() {
-  if [ -z "$2" ]; then
-    echo "Enter a PR number to be closed and a PR to comment the rebase"
-  else
-    local FROM_USER=$GITHUB_USER
-    if [ -n "$3" ]; then
-      FROM_USER=$3
-    fi
-    local PR_TO_CLOSE=$1
-    local PR_REBASED=$2
-    gh pr -u $FROM_USER $PR_TO_CLOSE --close || {
-      echo "Impossible close PR $PR_REBASED"
-      return
-    }
-    gh pr -u $FROM_USER $PR_TO_CLOSE --comment "Rebased. See $PR_REBASED"
-  fi
-}
-
-function gitGetRebaseAndSendPR() {
-  if [ -z "$1" ]; then
-    echo "Enter a PR number"
-  else
-    PR_NUMBER=$1
-    local FROM_USER=$GITHUB_USER
-    if [ -n "$2" ]; then
-      FROM_USER=$2
-      echo 'Getting PR' $1 'from user' $2
-    fi
-    gitMaster
-    gh pr -u $FROM_USER $PR_NUMBER || {
-      echo 'Impossible to get PR ' $PR_NUMBER ' from user ' $FROM_USER
-      return
-    }
-    echo "Rebasing"
-    gitRebase || {
-      echo 'Rebase failed. Fix rebase and continue manually with gitRebaseContinueAndSendPR'
-      return
-    }
-    echo "Running Poshi validations"
-    poshiSFCommit || {
-      echo 'Impossible to commit. Source Formated failed'
-      return
-    }
-    echo "Sending to me"
-    local PR_TITLE
-    PR_TITLE=$(gitGetPRTitle $PR_NUMBER $FROM_USER)
-    local PR_MESSAGE=""
-    if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage $PR_NUMBER $FROM_USER)
-    else
-      PR_MESSAGE=$(gitGetPRMessageWitSender $PR_NUMBER $FROM_USER)
-    fi
-    gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
-    local OPENED_PR
-    OPENED_PR=$(gitGetLastPRnumber)
-    gitCloseRebasedPR $PR_NUMBER $OPENED_PR $FROM_USER
-    git checkout pr-$PR_NUMBER
-    unset PR_NUMBER
-  fi
-}
-
 function gitRebaseContinueAndSendPR() {
   if [ -z "$PR_NUMBER" ]; then
     echo "You didn' run gitGetRebaseAndSendPR before"
@@ -299,16 +157,16 @@ function gitRebaseContinueAndSendPR() {
       return
     }
     echo "Sending to me"
-    local PR_TITLE=$(gitGetPRTitle $PR_NUMBER $FROM_USER)
+    local PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
     local PR_MESSAGE=""
     if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage $PR_NUMBER $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER -u $FROM_USER)
     else
-      PR_MESSAGE=$(gitGetPRMessageWitSender $PR_NUMBER $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
     fi
     gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
     local OPENED_PR=$(gitGetLastPRnumber)
-    gitCloseRebasedPR $PR_NUMBER $OPENED_PR $FROM_USER
+    gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
     git checkout pr-$PR_NUMBER
     unset PR_NUMBER
 
@@ -342,11 +200,11 @@ function gitGetFailingPRAndSendToBrian() {
       return
     }
     echo "Sending to Brian"
-    local PR_TITLE=$(gitGetPRTitle $PR_NUMBER_TO_BCHAN $FROM_USER)
+    local PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
     if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      local PR_MESSAGE=$(gitGetPRMessage $PR_NUMBER_TO_BCHAN $FROM_USER)
+      local PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
     else
-      local PR_MESSAGE=$(gitGetPRMessageWitSender $PR_NUMBER_TO_BCHAN $FROM_USER)
+      local PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
     fi
     gh pr -s brianchandotcom --title "$PR_TITLE" --description "$PR_MESSAGE"
     unset PR_NUMBER_TO_BCHAN
@@ -368,9 +226,9 @@ function gitRebaseBriansContinueAndSendPR() {
     }
     echo "Sending to Brian"
     local PR_TITLE
-    PR_TITLE=$(gitGetPRTitle $PR_NUMBER_TO_BCHAN)
+    PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER_TO_BCHAN)
     local PR_MESSAGE
-    PR_MESSAGE=$(gitGetPRMessageWitSender $PR_NUMBER_TO_BCHAN)
+    PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER_TO_BCHAN)
     gh pr -s brianchandotcom --title "$PR_TITLE" --description "$PR_MESSAGE"
     unset PR_NUMBER_TO_BCHAN
   fi
