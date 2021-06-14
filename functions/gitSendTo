@@ -34,7 +34,7 @@ gitSendTo() {
   if [ -z "$(git status --porcelain)" ]; then
     if [ "$runSF" = "true" ]; then
       poshiSFCommit || {
-        echo 'Impossible to commit. Source Formated failed'
+        echo 'Impossible to commit. Source Formatted failed'
         return
       }
     else

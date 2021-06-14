@@ -1,0 +1,83 @@
+function gitGetRebaseAndSendPR() {
+  local pullRequest
+  local username
+
+  while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    -pr)
+      shift
+      pullRequest="$1"
+      ;;
+    -u)
+      shift
+      username="$1"
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+
+  if [ -z "$pullRequest" ]; then
+    echo "Add a Pull request number"
+    echo " "
+    _showHelp "$0"
+  else
+    PR_NUMBER=$pullRequest
+    local FROM_USER
+    if [ -z "$username" ]; then
+      FROM_USER=$GITHUB_USER
+    else
+      FROM_USER=$username
+    fi
+    gitMaster
+    gh pr -u $FROM_USER $PR_NUMBER || {
+      echo 'Impossible to get PR ' $PR_NUMBER ' from user ' $FROM_USER
+      return
+    }
+    echo "Rebasing"
+    gitRebase || {
+      echo 'Rebase failed. Fix rebase and continue manually with gitRebaseContinueAndSendPR'
+      return
+    }
+    echo "Running Poshi validations"
+    poshiSFCommit || {
+      echo 'Impossible to commit. Source Formatted failed'
+      return
+    }
+    echo "Sending to me"
+    local PR_TITLE
+    PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
+    local PR_MESSAGE=""
+    if [ "$FROM_USER" = "$GITHUB_USER" ]; then
+      PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER -u $FROM_USER)
+    else
+      PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
+    fi
+    gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
+    local OPENED_PR
+    OPENED_PR=$(gitGetLastPRnumber)
+    gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
+    git checkout pr-$PR_NUMBER
+    unset PR_NUMBER
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,           Show brief help"
+  echo "-pr,                  Pull request number be rebased and resend. Mandatory"
+  echo "-u,                   User to get the PR from. If not set then $GITHUB_USER is used "
+}
+
+gitGetRebaseAndSendPR "$@"
