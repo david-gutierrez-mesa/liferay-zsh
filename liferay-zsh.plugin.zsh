@@ -114,27 +114,7 @@ alias gl="git log"
 
 alias gitRebaseBrian="git rebase brian/master"
 alias gitRebaseAbort="git rebase --abort && unset PR_NUMBER"
-alias gitRebaseContinue="git rebase --continue"
 
-function gitDeleteRemoteBranch() {
-  local BRANCH_TO_DELETE=$1
-  if [ -z "$1" ]; then
-    BRANCH_TO_DELETE=$(git branch --show-current)
-    if [ "$BRANCH_TO_DELETE" = "master" ]; then
-      echo 'You can not delete master branch'
-      return
-    fi
-  else
-    echo 'Branch not set. Removing current one remotlley'
-  fi
-  echo 'Removing remote branch named '$BRANCH_TO_DELETE 'from repo liferay-portal of user'$GITHUB_USER
-  git ls-remote --heads --exit-code git@github.com:$GITHUB_USER/liferay-portal.git $BRANCH_TO_DELETE
-  if [ $? -eq 0 ]; then
-    git push origin --delete $BRANCH_TO_DELETE
-  else
-    echo 'Remote branch does not exists. Nothing to do'
-  fi
-}
 
 alias gitFetchBrians="git fetch brian master"
 alias gitSendToMe="gitSendTo -u $GITHUB_USER"

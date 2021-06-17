@@ -23,7 +23,7 @@ function poshiSFCommit() {
       echo "There are not Source Formatted changes to commit"
     else
       local LPS_ID
-      LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)=$(git log -1 --pretty=%B | cut -d " " -f 1)
+      LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
       local message
       message=$("$LPS_ID SF")
       git add .

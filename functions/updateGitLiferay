@@ -20,17 +20,17 @@ function updateGitLiferay() {
   done
 
   if [ "$use_DXP" = "true" ]; then
-    cd $PATH_TO_DXP_PORTAL/
+    cd "$PATH_TO_DXP_PORTAL/" || exit
   else
-    cd $PATH_TO_PORTAL/
+    cd "$PATH_TO_PORTAL/" || exit
   fi
 
   gitClean && gitMaster &&
   gitCleanxdf &&
   git fetch upstream master &&
   git pull upstream master &&
-  git push origin head
-
+  git push origin head &&
+  ant setup-libs setup-sdk
 }
 
 _showHelp() {
