@@ -1,0 +1,45 @@
+function gitDeleteRemoteBranch() {
+  local branch
+  while [ "$1" != "" ]; do
+    case $1 in
+    -br)
+      shift
+      branch="$1"
+      ;;
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+
+  if [ -z "$branch" ]; then
+    branch=$(git branch --show-current)
+    echo "Branch not set. Removing current one ($branch) remotely"
+  fi
+  if [ "$branch" = "master" ]; then
+      echo "You can not delete master branch"
+      return
+  fi
+  echo "Removing remote branch named $branch from repo liferay-portal of user $GITHUB_USER"
+  git ls-remote --heads --exit-code git@github.com:"$GITHUB_USER"/liferay-portal.git "$branch"
+  if [ $? -eq 0 ]; then
+    git push origin --delete "$branch"
+  else
+    echo 'Remote branch does not exists. Nothing to do'
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function run:"
+  echo "  git branch -d <local-branch> "
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-br,              Branch to delete remotely. If not set then it will try to remove current one remotely"
+  echo "-h | -help,       Show brief help"
+}
+
+gitDeleteRemoteBranch "$@"

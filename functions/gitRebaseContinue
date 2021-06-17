@@ -1,0 +1,25 @@
+function gitRebaseContinue() {
+  while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+
+  git rebase --continue
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function just run:"
+  echo "  git rebase --continue"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,       Show brief help"
+}
+
+gitRebaseContinue "$@"

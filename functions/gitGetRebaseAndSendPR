@@ -1,6 +1,7 @@
 function gitGetRebaseAndSendPR() {
   local pullRequest
   local username
+  local skipUpdateGitLiferay="false"
 
   while [ "$1" != "" ]; do
     case $1 in
@@ -15,6 +16,10 @@ function gitGetRebaseAndSendPR() {
     -u)
       shift
       username="$1"
+      ;;
+    -sud | -skipupdategitliferay)
+      shift
+      skipUpdateGitLiferay="true"
       ;;
     *)
       echo "Invalid option"
@@ -38,6 +43,11 @@ function gitGetRebaseAndSendPR() {
       FROM_USER=$username
     fi
     gitMaster
+    if [ "$skipUpdateGitLiferay" = "false" ]; then
+      echo 'Updating git before rebase'
+      updateGitLiferay
+    fi
+
     gh pr -u $FROM_USER $PR_NUMBER || {
       echo 'Impossible to get PR ' $PR_NUMBER ' from user ' $FROM_USER
       return
@@ -75,9 +85,11 @@ _showHelp() {
   echo "$1 [options]"
   echo " "
   echo "options:"
-  echo "-h | -help,           Show brief help"
-  echo "-pr,                  Pull request number be rebased and resend. Mandatory"
-  echo "-u,                   User to get the PR from. If not set then $GITHUB_USER is used "
+  echo "-h | -help,                         Show brief help"
+  echo "-pr,                                Pull request number be rebased and resend. Mandatory"
+  echo "-u,                                 User to get the PR from. If not set then $GITHUB_USER is used"
+  echo "-sud | -skipupdategitliferay),    Skip update remote liferay repository before getting the PR and Rebase"
+
 }
 
 gitGetRebaseAndSendPR "$@"
