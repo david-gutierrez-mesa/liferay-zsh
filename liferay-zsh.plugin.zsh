@@ -112,11 +112,8 @@ function runIntegrationTest() {
 alias gs="git status"
 alias gl="git log"
 
-alias gitRebaseBrian="git rebase brian/master"
 alias gitRebaseAbort="git rebase --abort && unset PR_NUMBER"
 
-
-alias gitFetchBrians="git fetch brian master"
 alias gitSendToMe="gitSendTo -u $GITHUB_USER"
 alias gitSendToBrian="gitSendTo -u brianchandotcom -suj"
 alias gitSendToEchoUser="gitSendTo -u liferay-echo"
@@ -150,44 +147,6 @@ function gitRebaseContinueAndSendPR() {
     git checkout pr-$PR_NUMBER
     unset PR_NUMBER
 
-  fi
-}
-
-function gitGetFailingPRAndSendToBrian() {
-  if [ -z "$1" ]; then
-    echo "Enter a PR number"
-  else
-    local FROM_USER=$GITHUB_USER
-    if [ -n "$2" ]; then
-      FROM_USER=$2
-      echo 'Getting PR' $1 'from user' $2
-    fi
-    PR_NUMBER_TO_BCHAN=$1
-    gitMaster
-    gitFetchBrians
-    gh pr -u $FROM_USER $PR_NUMBER_TO_BCHAN || {
-      echo 'Impossible to get PR ' $PR_NUMBER_TO_BCHAN ' from user ' $FROM_USER
-      return
-    }
-    echo "Rebasing"
-    gitRebaseBrian || {
-      echo 'Rebase failed. Fix rebase and continue manually with gitRebaseBriansContinueAndSendPR'
-      return
-    }
-    echo "Running Poshi validations"
-    poshiSFCommit || {
-      echo 'Impossible to commit. Source Formated failed'
-      return
-    }
-    echo "Sending to Brian"
-    local PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
-    if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      local PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
-    else
-      local PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
-    fi
-    gh pr -s brianchandotcom --title "$PR_TITLE" --description "$PR_MESSAGE"
-    unset PR_NUMBER_TO_BCHAN
   fi
 }
 
