@@ -174,16 +174,11 @@ function gitRebaseBriansContinueAndSendPR() {
 }
 
 # Eng
-alias startLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh jpda run"
+alias updateCleanBundleCEStartLiferay="updateGitLiferay && mountBundle -s"
 
-alias stopLiferay="cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh stop && cd $PATH_TO_LIFERAY_MAIN"
+alias updateCleanBundleEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -s"
 
-alias updateCleanBundleCEStartLiferay="updateGitLiferay && mountBundle && startLiferay"
+alias updateCEStartLiferay="updateGitLiferay && mountBundle -u -s"
 
-alias updateCleanBundleEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp && startLiferay"
+alias updateEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -u -s"
 
-alias updateCEStartLiferay="updateGitLiferay && mountBundle -u && startLiferay"
-
-alias updateEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -u && startLiferay"
-
-alias restartLiferay="stopLiferay && sleep 300 && startLiferay"

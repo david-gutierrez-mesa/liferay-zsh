@@ -1,0 +1,31 @@
+# alias restartLiferay="stopLiferay && sleep 300 && startLiferay"
+
+function restartLiferay() {
+    while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+   stopLiferay && sleep 300 && startLiferay
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function run:"
+  echo "  stopLiferay && sleep 300 && startLiferay "
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-h | -help,       Show brief help"
+}
+
+restartLiferay "$@"
