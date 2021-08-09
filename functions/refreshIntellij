@@ -1,0 +1,24 @@
+function refreshIntellij() {
+    while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+   ${IJ_CLONE_PATH}/intellij "$@"
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function runs:"
+  echo "  ${IJ_CLONE_PATH}/intellij \"\$\@\" "
+  echo "And it is used to refresh liferay portal in IntelliJ IDEA. If it does not work fine, close IntelliJ IDEA and re-run $1"
+  echo "$1 [options]"
+  echo "options:"
+  echo "-h | -help,       Show brief help"
+}
+
+refreshIntellij "$@"
