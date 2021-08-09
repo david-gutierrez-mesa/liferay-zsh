@@ -1,0 +1,73 @@
+echo "Preparing environment for Poshi execution"
+local LIFERAY_ZSH_CHROMIUM_PATH=$CHROMIUM_INSTALLATION_PATH/Chromium.app
+if [ ! -d "$LIFERAY_ZSH_CHROMIUM_PATH" ]; then
+  echo "Downloading and installing Chromium in $LIFERAY_ZSH_CHROMIUM_PATH...."
+  [ ! -d "$LIFERAY_ZSH_DEPLOYMENTS_PATH" ] && mkdir -p "$LIFERAY_ZSH_DEPLOYMENTS_PATH"
+  cd $LIFERAY_ZSH_DEPLOYMENTS_PATH  && \
+  echo "Downloading Chromium from $CHROMIUM_DOWNLOAD_PATH"
+  curl -o Mac_chrome-mac.zip $CHROMIUM_DOWNLOAD_PATH && \
+  unzip Mac_chrome-mac.zip  && \
+  rm Mac_chrome-mac.zip && \
+  echo "Chromium installed in "
+fi
+
+function runPoshiTest() {
+  local poshiTest
+    while [ "$1" != "" ]; do
+    case $1 in
+    -pt | -poshiTest)
+      shift
+      poshiTest="$1"
+      ;;
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+    if [ -z "$poshiTest" ]; then
+      echo "Add a Poshi test to be executed"
+      echo " "
+      _showHelp "$0"
+    else
+      cd $PATH_TO_PORTAL/ && \
+      ant -f build-test.xml run-selenium-test -Dtest.class=$poshiTest && \
+      _openPoshiResults $poshiTest && \
+    fi
+}
+
+_openPoshiResults() {
+  if [ -z "$1" ]; then
+    echo "Enter a test to open results"
+  else
+    local FILENAME=$1:s/#/_/
+    if [[ $FILENAME != LocalFile* ]]; then
+      echo "Adding LocalFile"
+      FILENAME=LocalFile\."$FILENAME"
+    fi
+    local PATHTOINDEX=./portal-web/test-results/"$FILENAME"/index.html
+    if [[ -f "$PATHTOINDEX" ]]; then
+      open $PATHTOINDEX
+    else
+      echo "$PATHTOINDEX does not exist. Can not open test results"
+    fi
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function runs Poshi test passed"
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-pt | -poshiTest,   Test to be run in the form testFile#testName. If we only pass a test file, it's running all test cases in it. Mandatory"
+  echo "-h | -help,         Show brief help"
+}
+
+runPoshiTest "$@"
