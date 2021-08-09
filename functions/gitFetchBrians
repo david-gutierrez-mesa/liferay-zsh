@@ -18,7 +18,7 @@ function gitFetchBrians() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function run:"
+  echo "This function runs:"
   echo "  git fetch brianchandotcom master "
   echo "$1 [options]"
   echo " "
