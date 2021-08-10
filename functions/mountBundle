@@ -61,6 +61,7 @@ function mountBundle() {
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-setup-wizard.properties" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties"
   sed -i '' "s+%PATH_BUNDLES%+$PATH_TO_BUNDLES+g" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
+  sed -i '' "s+%LIFERAY_ZSH_RESOURCES_PATH%+$LIFERAY_ZSH_RESOURCES_PATH+g" "./test.$USER.properties"
   gitClean || return
   ij || return
 
