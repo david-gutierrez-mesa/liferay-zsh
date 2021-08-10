@@ -18,7 +18,7 @@ function gitCleanxdf() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function run:"
+  echo "This function runs:"
   echo "  git clean -xdf "
   echo "$1 [options]"
   echo " "

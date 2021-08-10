@@ -1,8 +1,8 @@
 #General variables
-export JIRA_URL="https://issues.liferay.com"
 export USER_HOME="$(echo ~)"
 export L_ZSH_CONFIG_FILE=$USER_HOME/.liferay-zsh.config
 export LIFERAY_ZSH_INSTALLATION_PATH="${0%/*}"
+export LIFERAY_ZSH_DEPLOYMENTS_PATH=$LIFERAY_ZSH_INSTALLATION_PATH/deployments
 
 #Load personal variables
 . $L_ZSH_CONFIG_FILE
@@ -13,6 +13,7 @@ export ANT_OPTS="-Xmx2560m"
 # JIRA
 JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
 export JIRA_CONFIG
+export JIRA_URL="https://issues.liferay.com"
 
 # JAVA
 JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
@@ -26,16 +27,16 @@ export PATH_TO_BUNDLES="$PATH_TO_LIFERAY_MAIN/bundles"
 export PATH_TO_TOMCAT_BIN_FOLDER="$PATH_TO_BUNDLES/$TOMCAT_VERSION/bin"
 export PORTAL_DATABASE_NAME="lportal"
 
+#Poshi automation
+export CHROMIUM_DOWNLOAD_PATH="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Mac%2F800208%2Fchrome-mac.zip?generation=1597949046060527&alt=media"
+export CHROMIUM_INSTALLATION_PATH=$LIFERAY_ZSH_DEPLOYMENTS_PATH/chrome-mac
+
 # MySql
 export MYSQL_HOME="/usr/local/mysql"
 export PATH=$MYSQL_HOME/bin:$PATH
 
 #IntelliJ IDEA
-IJ_CLONE_PATH="$PATH_TO_LIFERAY_MAIN/liferay-intellij"
-
-ij() {
-  ${IJ_CLONE_PATH}/intellij "$@"
-}
+export IJ_CLONE_PATH="$PATH_TO_LIFERAY_MAIN/liferay-intellij"
 
 # Testing tools
 alias testrayResultsFromPR='python ${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tools/testray.py'
@@ -44,39 +45,14 @@ alias testrayResultsFromPR='python ${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tool
 fpath=("${ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
 autoload -Uz $fpath[1]/*(.:t)
 
-# Poshi
-function runPoshiTest() {
-  cd $PATH_TO_PORTAL/
-  ant -f build-test.xml run-selenium-test -Dtest.class=$1
-  openPoshiResults $1
-}
-
-function openPoshiResults() {
-  if [ -z "$1" ]; then
-    echo "Enter a test to open results"
-  else
-    local FILENAME=$1:s/#/_/
-    if [[ $FILENAME != LocalFile* ]]; then
-      echo "Adding LocalFile"
-      FILENAME=LocalFile\."$FILENAME"
-    fi
-    local PATHTOINDEX=./portal-web/test-results/"$FILENAME"/index.html
-    if [[ -f "$PATHTOINDEX" ]]; then
-      open $PATHTOINDEX
-    else
-      echo "$PATHTOINDEX does not exist. Can not open test results"
-    fi
-  fi
-}
-
 # Integration
 function deployModule() {
   if [ -z "$1" ]; then
     gw clean deploy
   else
-    cd $PATH_TO_PORTAL/modules/apps/$1
+    cd "$PATH_TO_PORTAL/modules/apps/$1" || exit
     gw clean deploy
-    cd $PATH_TO_PORTAL/
+    cd "$PATH_TO_PORTAL/" || exit
   fi
 }
 
@@ -104,7 +80,7 @@ function runIntegrationTest() {
     open $(pwd)/build/reports/tests/testIntegration/index.html
   fi
   if [ ! -z "$2" ]; then
-    cd $PATH_TO_PORTAL/
+    cd "$PATH_TO_PORTAL/" || exit
   fi
 }
 
@@ -160,7 +136,7 @@ function gitRebaseBriansContinueAndSendPR() {
     }
     echo "Running Poshi validations"
     poshiSFCommit || {
-      echo 'Impossible to commit. Source Formated failed'
+      echo 'Impossible to commit. Source Formatter failed'
       return
     }
     echo "Sending to Brian"

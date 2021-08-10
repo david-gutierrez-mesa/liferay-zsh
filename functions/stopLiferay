@@ -18,7 +18,7 @@ function stopLiferay() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function run:"
+  echo "This function runs:"
   echo "  cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh stop && cd $PATH_TO_LIFERAY_MAIN "
   echo " "
   echo "$1 [options]"

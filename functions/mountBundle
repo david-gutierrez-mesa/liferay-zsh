@@ -54,15 +54,18 @@ function mountBundle() {
   fi
   ant all || return
   if [ "$useHSQL" = "false" ]; then
-    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-ext.properties"  "$PATH_TO_BUNDLES/portal-ext.properties"
-    sed -i '' "s/%JDBC_USER%/$MYSQL_USER/g" "$PATH_TO_BUNDLES/portal-ext.properties"
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-ext.properties"  "$PATH_TO_BUNDLES/portal-ext.properties" && \
+    sed -i '' "s/%JDBC_USER%/$MYSQL_USER/g" "$PATH_TO_BUNDLES/portal-ext.properties" && \
     sed -i '' "s/%JDBC_PASSWORD%/$MYSQL_PASSWORD/g" "$PATH_TO_BUNDLES/portal-ext.properties"
   fi
-  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-setup-wizard.properties" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
-  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties"
+  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-setup-wizard.properties" "$PATH_TO_BUNDLES/portal-setup-wizard.properties" && \
   sed -i '' "s+%PATH_BUNDLES%+$PATH_TO_BUNDLES+g" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
+
+  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties" && \
+  sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
+
   gitClean || return
-  ij || return
+  refreshIntellij || return
 
   if [ "$startLiferay" = "true" ]; then
       startLiferay || return

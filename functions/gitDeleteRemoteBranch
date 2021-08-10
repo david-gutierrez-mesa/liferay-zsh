@@ -33,7 +33,7 @@ function gitDeleteRemoteBranch() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function run:"
+  echo "This function runs:"
   echo "  git branch -d <local-branch> "
   echo "$1 [options]"
   echo " "

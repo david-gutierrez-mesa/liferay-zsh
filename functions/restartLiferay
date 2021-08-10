@@ -20,7 +20,7 @@ function restartLiferay() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function run:"
+  echo "This function runs:"
   echo "  stopLiferay && sleep 300 && startLiferay "
   echo " "
   echo "$1 [options]"
