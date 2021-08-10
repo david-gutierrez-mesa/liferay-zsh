@@ -25,7 +25,7 @@ function poshiSFCommit() {
       local LPS_ID
       LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
       local message
-      message=$("$LPS_ID SF")
+      message="$LPS_ID SF"
       git add .
       git commit -m "$message"
       echo "Source formatted committed as $message"

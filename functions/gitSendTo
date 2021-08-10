@@ -16,7 +16,7 @@ gitSendTo() {
     -supr | -skipUpdatePullRequest)
       updatePullRequest="false"
       ;;
-    -suj | -updateJiraIssue)
+    -uj | -updateJiraIssue)
       updateJira="true"
       ;;
     -ssf | -skipSF)
@@ -82,7 +82,7 @@ _showHelp() {
   echo "-h | -help,                     Show brief help"
   echo "-u,                             Git use to send the PR. Mandatory"
   echo "-supr | -supdatePullRequest,    Don't update PR with info get from LPS extracted from last commit"
-  echo "-suj | -updateJiraIssue,        Update of Jira ticket from last commit. If you have more than one LPS in your commits you must update the other ones manually"
+  echo "-uj | -updateJiraIssue,        Update of Jira ticket from last commit. If you have more than one LPS in your commits you must update the other ones manually"
   echo "-ssf | -skipSF,                 Skip Poshi validation and Source Formatter"
 }
 
