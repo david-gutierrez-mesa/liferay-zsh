@@ -13,7 +13,14 @@ function stopLiferay() {
     esac
     shift
   done
-   cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh stop && cd $PATH_TO_LIFERAY_MAIN
+   cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh stop
+   while ps -eo command | grep "$PATH_TO_BUNDLES" | grep -v grep > /dev/null
+   do
+      echo "Stopping liferay..."
+      sleep 2
+   done
+   echo "Liferay was stopped"
+   cd "$PATH_TO_LIFERAY_MAIN" || exit
 }
 
 _showHelp() {

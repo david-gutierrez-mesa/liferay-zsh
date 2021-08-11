@@ -15,7 +15,12 @@ function restartLiferay() {
     esac
     shift
   done
-   stopLiferay && sleep 300 && startLiferay
+  if ps -eo command | grep "$PATH_TO_BUNDLES" | grep -v grep > /dev/null
+     then
+       echo "Liferay Running. Let's stop it first.."
+       stopLiferay
+  fi
+  startLiferay
 }
 
 _showHelp() {

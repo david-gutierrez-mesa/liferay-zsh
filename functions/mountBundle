@@ -34,6 +34,12 @@ function mountBundle() {
     shift
   done
 
+  if ps -eo command | grep "$PATH_TO_BUNDLES" | grep -v grep > /dev/null
+  then
+    echo "Liferay Running. Let's stop it first.."
+    stopLiferay
+  fi
+
   if [ "$deploy_DXP" = "false" ]; then
     cd "$PATH_TO_PORTAL/" || return
   else
