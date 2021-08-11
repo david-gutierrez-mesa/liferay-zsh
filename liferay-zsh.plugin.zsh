@@ -56,34 +56,6 @@ function deployModule() {
   fi
 }
 
-function runIntegrationTest() {
-  if [ ! -z "$2" ]; then
-    echo cd modules/apps/$2
-    cd modules/apps/$2
-    if [ $? -ne 0 ]; then
-      echo "Module $2  does not exist in modules/app/"
-      exit
-    fi
-  fi
-  if [ -z "$1" ]; then
-    echo gw testIntegration
-    gw testIntegration
-  elif [ "$1" = all ]; then
-    echo gw testIntegration
-    gw testIntegration
-  else
-    echo testIntegration --tests "*$1*"
-    gw testIntegration --tests "*$1*"
-  fi
-  open $(pwd)/$(basename $(pwd))-test/build/reports/tests/testIntegration/index.html
-  if [ $? -ne 0 ]; then
-    open $(pwd)/build/reports/tests/testIntegration/index.html
-  fi
-  if [ ! -z "$2" ]; then
-    cd "$PATH_TO_PORTAL/" || exit
-  fi
-}
-
 # Git
 alias gs="git status"
 alias gl="git log"

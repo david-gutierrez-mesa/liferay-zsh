@@ -1,0 +1,66 @@
+function runIntegrationTest() {
+    local integrationTest
+    local module
+    while [ "$1" != "" ]; do
+    case $1 in
+    -it | -integrationTest)
+      shift
+      integrationTest="$1"
+      ;;
+    -m | -module)
+      shift
+      module="$1"
+      ;;
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+    if [ ! -z "$module" ]; then
+      echo "cd modules/apps/$module"
+      cd "modules/apps/$module" || exit
+      if [ $? -ne 0 ]; then
+        echo "Module $module  does not exist in modules/app/"
+        exit
+      fi
+    fi
+    if [ -z "$integrationTest" ]; then
+      echo gw testIntegration
+      gw testIntegration
+    elif [ "$integrationTest" = all ]; then
+      echo gw testIntegration
+      gw testIntegration
+    else
+      echo testIntegration --tests "*$integrationTest*"
+      gw testIntegration --tests "*$integrationTest*"
+    fi
+    open "$(pwd)/$(basename "$(pwd)")-test/build/reports/tests/testIntegration/index.html"
+    if ! make mytarget;
+    then
+      open "$(pwd)/build/reports/tests/testIntegration/index.html"
+    fi
+    if [ -n "$module" ]; then
+      cd "$PATH_TO_PORTAL/" || exit
+    fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function runs an integration test. Example"
+  echo "  runIntegrationTest -it testOrderByDDMNumberFieldRepeatable -m journal"
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-it | -integrationTest,   Integration test to be run. If we don't pass it or we set all then all tests in current path or in module passed by -m  parameter are executed"
+  echo "-m | -module,             Module where the test is located. Module must be relative to modules/apps/. If we don't set it, current path is taking as module"
+  echo "-h | -help,               Show brief help"
+}
+
+runIntegrationTest "$@"
