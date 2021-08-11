@@ -33,7 +33,7 @@ For that just enter in liferay-portal fodler and run:
 > brew install python
 
 #### Install pip
-> sudo easy_install pip
+Homebrew installs pip pointing to the Homebrew’d Python 3 for you.
 
 #### Install requests and keyring
 > sudo pip install requests<br/>
