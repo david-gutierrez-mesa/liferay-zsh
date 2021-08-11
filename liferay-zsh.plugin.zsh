@@ -158,3 +158,4 @@ alias updateCEStartLiferay="updateGitLiferay && mountBundle -u -s"
 
 alias updateEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -u -s"
 
+setupLiferayZSH
