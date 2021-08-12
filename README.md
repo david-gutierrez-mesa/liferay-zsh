@@ -135,3 +135,6 @@ https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#adding-a-new-plugin
 https://github.com/ohmyzsh/ohmyzsh
 
 http://nodegh.io/
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
