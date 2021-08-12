@@ -84,7 +84,9 @@ Edit /Users/{youruser}/ .liferay-zsh.conf and fill al the variables there.
 
 **Note:** to generate a token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 
-Reload zsh by typing 'zsh' in your terminal
+Reload zsh by typing 'zsh' in your terminal.
+
+Run installLiferayZSH
 
 ## References
 https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#adding-a-new-plugin
