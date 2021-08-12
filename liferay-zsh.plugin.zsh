@@ -42,7 +42,7 @@ export IJ_CLONE_PATH="$PATH_TO_LIFERAY_MAIN/liferay-intellij"
 alias testrayResultsFromPR='python ${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tools/testray.py'
 
 #Load functions
-fpath=("${ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
+fpath=("${LIFERAY_ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
 autoload -Uz $fpath[1]/*(.:t)
 
 # Integration
