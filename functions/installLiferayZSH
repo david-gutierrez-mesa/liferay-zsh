@@ -1,4 +1,4 @@
-function setupLiferayZSH() {
+function installLiferayZSH() {
     while [ "$1" != "" ]; do
     case $1 in
     -h | -help)
@@ -13,23 +13,25 @@ function setupLiferayZSH() {
     esac
     shift
   done
-  echo "### Running setup Liferay ZSH ###"
+  echo "### Running install Liferay ZSH ###"
+  echo "Generating file test.$USER.properties in $PATH_TO_PORTAL "
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties" && \
   sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_PORTAL/test.$USER.properties"
 
+  echo "Generating file test.$USER.properties in $PATH_TO_DXP_PORTAL "
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_DXP_PORTAL/test.$USER.properties" && \
   sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_DXP_PORTAL/test.$USER.properties"
 
-  echo "### Setup Liferay ZSH done! ###"
+  echo "### Liferay ZSH installed! ###"
 }
 
 _showHelp() {
   echo "Function help:"
-  echo "This function runs setup steps to use Liferay ZSH. It's always executed when we open a terminal"
+  echo "This function install everything we need to use Liferay ZSH"
   echo " "
   echo "$1 [options]"
   echo "options:"
   echo "-h | -help,       Show brief help"
 }
 
-setupLiferayZSH "$@"
+installLiferayZSH "$@"
