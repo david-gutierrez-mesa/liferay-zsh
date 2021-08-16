@@ -45,17 +45,6 @@ alias testrayResultsFromPR='python ${LIFERAY_ZSH_INSTALLATION_PATH}/testing-tool
 fpath=("${LIFERAY_ZSH_INSTALLATION_PATH}/functions" "${fpath[@]}")
 autoload -Uz $fpath[1]/*(.:t)
 
-# Integration
-function deployModule() {
-  if [ -z "$1" ]; then
-    gw clean deploy
-  else
-    cd "$PATH_TO_PORTAL/modules/apps/$1" || exit
-    gw clean deploy
-    cd "$PATH_TO_PORTAL/" || exit
-  fi
-}
-
 # Git
 alias gs="git status"
 alias gl="git log"

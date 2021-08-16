@@ -1,0 +1,40 @@
+function deployModule() {
+  local module
+    while [ "$1" != "" ]; do
+    case $1 in
+    -m | -module)
+      shift
+      module="$1"
+      ;;
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+  if [ -z "$module" ]; then
+    gw clean deploy
+  else
+    cd "$PATH_TO_PORTAL/modules/apps/$module" || exit
+    gw clean deploy
+    cd "$PATH_TO_PORTAL/" || exit
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function get a Pull Request from Echo User"
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-m | -module,       Path of module to deploy from $PATH_TO_PORTAL/modules/apps/. If not set deploy in current path"
+  echo "-h | -help,         Show brief help"
+}
+
+deployModule "$@"
