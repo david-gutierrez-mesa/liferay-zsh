@@ -1,4 +1,4 @@
-function gitGetFromEchoUser() {
+function gitGetPRFromEchoUser() {
   local pullRequest
     while [ "$1" != "" ]; do
     case $1 in
@@ -37,4 +37,4 @@ _showHelp() {
   echo "-h | -help,         Show brief help"
 }
 
-gitGetFromEchoUser "$@"
+gitGetPRFromEchoUser "$@"
