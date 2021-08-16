@@ -1,0 +1,40 @@
+function gitGetFromEchoUser() {
+  local pullRequest
+    while [ "$1" != "" ]; do
+    case $1 in
+    -pr | -pullRequest)
+      shift
+      pullRequest="$1"
+      ;;
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+    if [ -z "$pullRequest" ]; then
+      echo "Add a Pull Request number to get"
+      echo " "
+      _showHelp "$0"
+    else
+        gh pr -u liferay-echo $pullRequest
+    fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function get a Pull Request from Echo User"
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-pr | -poshiTest,   Pull Request number to be get. Mandatory"
+  echo "-h | -help,         Show brief help"
+}
+
+gitGetFromEchoUser "$@"
