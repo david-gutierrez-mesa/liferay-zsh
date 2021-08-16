@@ -66,8 +66,6 @@ alias gitSendToMe="gitSendTo -u $GITHUB_USER"
 alias gitSendToBrian="gitSendTo -u brianchandotcom -suj"
 alias gitSendToEchoUser="gitSendTo -u liferay-echo"
 
-alias gitGetFromEchoUser="gh pr -u liferay-echo"
-
 function gitRebaseContinueAndSendPR() {
   if [ -z "$PR_NUMBER" ]; then
     echo "You didn' run gitGetRebaseAndSendPR before"
