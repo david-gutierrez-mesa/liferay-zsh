@@ -28,7 +28,7 @@ Download in $PATH_TO_LIFERAY_MAIN
 ### Set upstream and brianchandotcom for liferay-portal
 For that just enter in liferay-portal fodler and run:
 ```bash
-git remote add upstream https://github.com/liferay/liferay-portal.git <br/>
+git remote add upstream https://github.com/liferay/liferay-portal.git
 git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal.git
 ```
 
@@ -43,7 +43,7 @@ Homebrew installs pip pointing to the Homebrew’d Python 3 for you.
 
 #### Install requests and keyring
 ```bash
-sudo pip install requests<br/>
+sudo pip install requests
 sudo pip install keyring
 ```
 
