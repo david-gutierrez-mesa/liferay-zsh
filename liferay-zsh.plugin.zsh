@@ -16,8 +16,10 @@ export JIRA_CONFIG
 export JIRA_URL="https://issues.liferay.com"
 
 # JAVA
-JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
-export JAVA_HOME
+if [ -z "$JAVA_HOME" ]; then
+  JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+  export JAVA_HOME
+fi
 
 # LIFERAY
 export TOMCAT_VERSION="tomcat-9.0.43"

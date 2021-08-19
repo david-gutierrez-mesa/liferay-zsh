@@ -112,10 +112,9 @@ Steps to follow:
 
 **Note:** to generate a git hub token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 
-### Run install function
-Now that all the configuration is done you just need to run installation script
+### Reload zsh
+Now that all the configuration is done you just need to reload zsh
 1. Reload zsh by typing 'zsh' in your terminal. 
-2. Run installLiferayZSH
 
 Now you are ready to use liferay-zsh plugin
 
