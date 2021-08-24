@@ -11,14 +11,6 @@ if [ ! -d "$LIFERAY_ZSH_CHROMIUM_PATH" ]; then
   echo "Chromium installed in "
 fi
 
-  echo "  Generating file test.$USER.properties in $PATH_TO_PORTAL "
-  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties" && \
-  sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_PORTAL/test.$USER.properties"
-
-  echo "  Generating file test.$USER.properties in $PATH_TO_DXP_PORTAL "
-  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_DXP_PORTAL/test.$USER.properties" && \
-  sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_DXP_PORTAL/test.$USER.properties"
-
 function runPoshiTest() {
   local poshiTest
     while [ "$1" != "" ]; do
@@ -70,7 +62,7 @@ _openPoshiResults() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function runs Poshi test passed"
+  echo "This function runs Poshi test"
   echo " "
   echo "$1 [options]"
   echo "options:"
