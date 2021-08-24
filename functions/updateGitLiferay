@@ -30,7 +30,17 @@ function updateGitLiferay() {
   git fetch upstream master &&
   git pull upstream master &&
   git push origin head &&
-  ant setup-libs setup-sdk
+  ant setup-libs setup-sdk &&
+
+  if [ "$use_DXP" = "true" ]; then
+    echo "  Generating file test.$USER.properties in $PATH_TO_PORTAL "
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties" && \
+    sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_PORTAL/test.$USER.properties"
+  else
+    echo "  Generating file test.$USER.properties in $PATH_TO_DXP_PORTAL "
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_DXP_PORTAL/test.$USER.properties" && \
+    sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_DXP_PORTAL/test.$USER.properties"
+  fi
 }
 
 _showHelp() {
