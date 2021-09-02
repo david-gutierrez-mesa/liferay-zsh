@@ -8,7 +8,6 @@ function gitDeleteLocalBranch() {
       branch="$1"
       ;;
     -f | -force)
-      shift
       force="true"
       ;;
     -h | -help)

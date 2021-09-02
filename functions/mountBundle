@@ -10,19 +10,15 @@ function mountBundle() {
       return 0
       ;;
     -dxp)
-      shift
       deploy_DXP="true"
       ;;
     -hsql)
-      shift
       useHSQL="true"
       ;;
     -u)
-      shift
       deleteBundle="false"
       ;;
     -s)
-      shift
       startLiferay="true"
       ;;
     *)
