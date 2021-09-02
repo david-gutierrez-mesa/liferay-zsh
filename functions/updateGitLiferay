@@ -7,7 +7,6 @@ function updateGitLiferay() {
       return 0
       ;;
     -dxp)
-      shift
       use_DXP="true"
       ;;
     *)

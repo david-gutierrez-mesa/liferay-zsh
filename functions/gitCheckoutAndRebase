@@ -13,7 +13,6 @@ function gitCheckoutAndRebase() {
       return 0
       ;;
     -ssp | -skipStashPop)
-      shift
       stashPop="false"
       ;;
     *)

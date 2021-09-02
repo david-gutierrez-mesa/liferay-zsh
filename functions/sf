@@ -9,7 +9,6 @@ function sf() {
       return 0
       ;;
     -pr)
-      shift
       local_changes="true"
       ;;
     *)
