@@ -45,7 +45,7 @@ gitSendTo() {
     LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
     if [ "$updatePullRequest" = "true" ]; then
       local LPS_SUMMARY
-      LPS_SUMMARY=$(jiraGetIssueSummary "$LPS_ID")
+      LPS_SUMMARY=$(jiraGetIssueSummary -ji "$LPS_ID")
       local PR_TITLE="$LPS_ID $LPS_SUMMARY"
       local PR_MESSAGE="$JIRA_URL/browse/$LPS_ID"
       gitDeleteRemoteBranch
