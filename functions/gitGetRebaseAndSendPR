@@ -1,6 +1,7 @@
 function gitGetRebaseAndSendPR() {
   local pullRequest
-  local username
+  local usernameFrom
+  local usernameTo
   local skipUpdateGitLiferay="false"
 
   while [ "$1" != "" ]; do
@@ -13,9 +14,13 @@ function gitGetRebaseAndSendPR() {
       shift
       pullRequest="$1"
       ;;
-    -u)
+    -uf)
       shift
-      username="$1"
+      usernameFrom="$1"
+      ;;
+    -ut)
+      shift
+      usernameTo="$1"
       ;;
     -sud | -skipupdategitliferay)
       skipUpdateGitLiferay="true"
@@ -36,10 +41,16 @@ function gitGetRebaseAndSendPR() {
   else
     PR_NUMBER=$pullRequest
     local FROM_USER
-    if [ -z "$username" ]; then
+    local TO_USER
+    if [ -z "$usernameFrom" ]; then
       FROM_USER=$GITHUB_USER
     else
-      FROM_USER=$username
+      FROM_USER=$usernameFrom
+    fi
+    if [ -z "$usernameTo" ]; then
+      TO_USER=$GITHUB_USER
+    else
+      TO_USER=$usernameTo
     fi
     gitMaster
     if [ "$skipUpdateGitLiferay" = "false" ]; then
@@ -65,12 +76,12 @@ function gitGetRebaseAndSendPR() {
     local PR_TITLE
     PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
     local PR_MESSAGE=""
-    if [ "$FROM_USER" = "$GITHUB_USER" ]; then
+    if [ "$FROM_USER" = "$TO_USER" ]; then
       PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER -u $FROM_USER)
     else
       PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
     fi
-    gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
+    gh pr -s $TO_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
     local OPENED_PR
     OPENED_PR=$(gitGetLastPRnumber)
     gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
@@ -86,8 +97,9 @@ _showHelp() {
   echo "options:"
   echo "-h | -help,                         Show brief help"
   echo "-pr,                                Pull request number be rebased and resend. Mandatory"
-  echo "-u,                                 User to get the PR from. If not set then $GITHUB_USER is used"
-  echo "-sud | -skipupdategitliferay),    Skip update remote liferay repository before getting the PR and Rebase"
+  echo "-uf,                                User to get the PR from. If not set then $GITHUB_USER is used"
+  echo "-ut,                                User to send the PR to. If not set then $GITHUB_USER is used"
+  echo "-sud | -skipupdategitliferay),      Skip update remote liferay repository before getting the PR and Rebase"
 
 }
 
