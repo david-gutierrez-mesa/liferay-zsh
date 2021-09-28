@@ -26,10 +26,17 @@ Download in $PATH_TO_LIFERAY_MAIN
 * https://github.com/holatuwol/liferay-intellij
 
 ### Set upstream and brianchandotcom for liferay-portal
-For that just enter in liferay-portal fodler and run:
+For that just enter in liferay-portal folder and run:
 ```bash
 git remote add upstream https://github.com/liferay/liferay-portal.git
 git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal.git
+```
+
+### Set upstream and brianchandotcom for liferay-portal-ee
+For that just enter in liferay-portal-ee folder and run:
+```bash
+git remote add upstream https://github.com/liferay/liferay-portal-ee.git
+git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal-ee.git
 ```
 
 ### Dependencies for testray.py
