@@ -22,11 +22,10 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 # LIFERAY
-export TOMCAT_VERSION="tomcat-9.0.53"
+
 export PATH_TO_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal"
 export PATH_TO_DXP_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal-ee"
 export PATH_TO_BUNDLES="$PATH_TO_LIFERAY_MAIN/bundles"
-export PATH_TO_TOMCAT_BIN_FOLDER="$PATH_TO_BUNDLES/$TOMCAT_VERSION/bin"
 export PORTAL_DATABASE_NAME="lportal"
 
 #Poshi automation
