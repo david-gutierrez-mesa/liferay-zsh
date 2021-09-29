@@ -13,7 +13,10 @@ function startLiferay() {
     esac
     shift
   done
-   cd $PATH_TO_TOMCAT_BIN_FOLDER/ && ./catalina.sh jpda run
+    local PATH_TO_TOMCAT_BIN_FOLDER
+    PATH_TO_TOMCAT_BIN_FOLDER=$(ls -d -- "$PATH_TO_BUNDLES"/tomcat-*)/bin
+    cd "$PATH_TO_TOMCAT_BIN_FOLDER/" &&
+    ./catalina.sh jpda run
 }
 
 _showHelp() {
