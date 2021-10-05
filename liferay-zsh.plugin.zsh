@@ -109,11 +109,3 @@ function gitRebaseBriansContinueAndSendPR() {
   fi
 }
 
-# Eng
-alias updateCleanBundleCEStartLiferay="updateGitLiferay && mountBundle -s"
-
-alias updateCleanBundleEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -s"
-
-alias updateCEStartLiferay="updateGitLiferay && mountBundle -u -s"
-
-alias updateEEStartLiferay="updateGitLiferay -dxp && mountBundle -dxp -u -s"

@@ -24,12 +24,13 @@ function updateGitLiferay() {
     cd "$PATH_TO_PORTAL/" || exit
   fi
 
-  gitClean && gitMaster &&
-  gitCleanxdf &&
-  git fetch upstream master &&
-  git pull upstream master &&
-  git push origin head &&
-  ant setup-libs setup-sdk
+  gitClean || exit
+  gitMaster || exit
+  gitCleanxdf || exit
+  git fetch upstream master || exit
+  git pull upstream master || exit
+  git push origin head || exit
+  ant setup-libs setup-sdk || exit
 
   if [ "$use_DXP" = "true" ]; then
     echo "  Generating file test.$USER.properties in $PATH_TO_PORTAL "
