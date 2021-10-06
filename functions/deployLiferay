@@ -44,7 +44,7 @@ _showHelp() {
   echo "-dxp,                     Mount DXP bundle instead of CE one"
   echo "-hsql,                    Use hsql data base instead of MySQL"
   echo "-u,                       Update exiting mounted bundle"
-  echo "-ss | skipStartLiferay,   Start Liferay after mount the bundle"
+  echo "-ss | skipStartLiferay,   Skip start Liferay after mount the bundle"
 }
 
 deployLiferay "$@"
