@@ -18,7 +18,7 @@ function deployLiferay() {
       then
         mountBundleArguments="${mountBundleArguments}-dxp"
       else
-        mountBundleArguments="${mountBundleArguments}-dxp"
+        mountBundleArguments="${mountBundleArguments} -dxp"
       fi
       ;;
     -hsql)
