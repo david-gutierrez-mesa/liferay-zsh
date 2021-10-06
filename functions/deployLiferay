@@ -8,17 +8,42 @@ function deployLiferay() {
       return 0
       ;;
     -dxp)
-      updateGitArguments="${updateGitArguments} -dxp"
-      mountBundleArguments="${mountBundleArguments} -dxp"
+      if [ -z "${updateGitArguments}" ]
+      then
+        updateGitArguments="${updateGitArguments}-dxp"
+      else
+        updateGitArguments="${updateGitArguments} -dxp"
+      fi
+      if [ -z "${mountBundleArguments}" ]
+      then
+        mountBundleArguments="${mountBundleArguments}-dxp"
+      else
+        mountBundleArguments="${mountBundleArguments}-dxp"
+      fi
       ;;
     -hsql)
-      mountBundleArguments="${mountBundleArguments} -hsql"
+      if [ -z "${updateGitArguments}" ]
+      then
+        updateGitArguments="${updateGitArguments}-hsql"
+      else
+        updateGitArguments="${updateGitArguments} -hsql"
+      fi
       ;;
     -u)
-      mountBundleArguments="${mountBundleArguments} -u"
+      if [ -z "${updateGitArguments}" ]
+      then
+        updateGitArguments="${updateGitArguments}-u"
+      else
+        updateGitArguments="${updateGitArguments} -u"
+      fi
       ;;
     -ss | skipStartLiferay)
-      mountBundleArguments="${mountBundleArguments} -ss"
+      if [ -z "${updateGitArguments}" ]
+      then
+        updateGitArguments="${updateGitArguments}-ss"
+      else
+        updateGitArguments="${updateGitArguments} -ss"
+      fi
       ;;
     *)
       echo "Invalid option"
