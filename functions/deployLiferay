@@ -31,7 +31,6 @@ function deployLiferay() {
 
   updateGitLiferay "${updateGitArguments}" || exit
   mountBundle "${mountBundleArguments}" || exit
-  startLiferay
 
 }
 
