@@ -1,29 +1,49 @@
 function deployModule() {
-  local module
+  local use_DXP="false"
+  local modules
+  local readMoreModules="false"
     while [ "$1" != "" ]; do
     case $1 in
+    -dxp)
+       use_DXP="true"
+       readMoreModules="false"
+    ;;
     -m | -module)
       shift
-      module="$1"
+      modules="$1"
+      readMoreModules="true"
       ;;
     -h | -help)
       _showHelp "$0"
+      readMoreModules="false"
       return 0
       ;;
     *)
-      echo "Invalid option"
-      _showHelp "$0"
-      return 0
+       if [ "$readMoreModules" = "true" ]; then
+         modules="$modules $1"
+      else
+         echo "Invalid option"
+         _showHelp "$0"
+         return 0
+      fi
       ;;
     esac
     shift
   done
-  if [ -z "$module" ]; then
+  if [ -z "$modules" ]; then
     gw clean deploy
   else
-    cd "$PATH_TO_PORTAL/modules/apps/$module" || exit
-    gw clean deploy
-    cd "$PATH_TO_PORTAL/" || exit
+    local USE_PATH=$PATH_TO_PORTAL
+    if [ "$use_DXP" = "true" ]; then
+      USE_PATH=$PATH_TO_DXP_PORTAL
+    fi
+    for module in $(echo "$modules" )
+    do
+      echo "Deploying module $module on $USE_PATH"
+      cd "$USE_PATH/modules/apps/$module" || return 1
+      gw clean deploy
+    done
+    cd "$USE_PATH/" || return 1
   fi
 }
 
@@ -33,7 +53,8 @@ _showHelp() {
   echo " "
   echo "$1 [options]"
   echo "options:"
-  echo "-m | -module,       Path of module to deploy from $PATH_TO_PORTAL/modules/apps/. If not set deploy in current path"
+  echo "-dxp,               Deploy an dxp module instead of CE one"
+  echo "-m | -module,       Path of modules to deploy from $PATH_TO_PORTAL/modules/apps/. If not set deploy in current path. More that one space separated can be passed"
   echo "-h | -help,         Show brief help"
 }
 
