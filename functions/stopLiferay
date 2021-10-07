@@ -23,7 +23,7 @@ function stopLiferay() {
       sleep 2
     done
     echo "Liferay was stopped"
-    cd "$PATH_TO_LIFERAY_MAIN" || exit
+    cd "$PATH_TO_LIFERAY_MAIN" || return 1
 }
 
 _showHelp() {

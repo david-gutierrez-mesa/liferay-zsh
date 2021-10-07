@@ -54,8 +54,8 @@ function deployLiferay() {
     shift
   done
 
-  updateGitLiferay "${updateGitArguments}" || exit
-  mountBundle "${mountBundleArguments}" || exit
+  updateGitLiferay "${updateGitArguments}" || return 1
+  mountBundle "${mountBundleArguments}" || return 1
 
 }
 
