@@ -25,7 +25,7 @@ function runIntegrationTest() {
   done
     if [ ! -z "$module" ]; then
       echo "cd modules/apps/$module"
-      cd "modules/apps/$module" || exit
+      cd "modules/apps/$module" || return 1
       if [ $? -ne 0 ]; then
         echo "Module $module  does not exist in modules/app/"
         exit
@@ -47,7 +47,7 @@ function runIntegrationTest() {
       open "$(pwd)/build/reports/tests/testIntegration/index.html"
     fi
     if [ -n "$module" ]; then
-      cd "$PATH_TO_PORTAL/" || exit
+      cd "$PATH_TO_PORTAL/" || return 1
     fi
 }
 
