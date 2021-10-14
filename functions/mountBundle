@@ -3,6 +3,7 @@ function mountBundle() {
   local deleteBundle="true"
   local useHSQL="false"
   local startLiferay="true"
+  local executeGitClean="true"
   while [ "$1" != "" ]; do
     case $1 in
     -h | -help)
@@ -18,8 +19,11 @@ function mountBundle() {
     -u)
       deleteBundle="false"
       ;;
+    -sgc | skipGitClean)
+       startLiferay="false"
+       ;;
     -ss | skipStartLiferay)
-      startLiferay="false"
+      executeGitClean="false"
       ;;
     *)
       echo "Invalid option"
@@ -37,23 +41,27 @@ function mountBundle() {
   fi
 
   if [ "$deploy_DXP" = "false" ]; then
+    echo "Deploying Liferay Community Edition..."
     cd "$PATH_TO_PORTAL/" || return
   else
+    echo "Deploying Liferay DXP Edition..."
     cd "$PATH_TO_DXP_PORTAL/" || return
   fi
   if [ "$deleteBundle" = "true" ]; then
-    echo "Deleting /bundles folder and cleaning DB"
+    echo "Deleting /bundles folder and cleaning DB..."
     rm -rf ../bundles
     mysqlRecreateDataBase
   fi
-
+  if [ "$executeGitClean" = "true" ]; then
+      echo "Executing gitClean..."
+      gitClean || return
+  fi
   if [ "$deploy_DXP" = "false" ]; then
     ant setup-profile-portal
-    echo "Deploying Liferay Community Edition"
   else
     ant setup-profile-dxp
-    echo "Deploying Liferay DXP Edition"
   fi
+  echo "Running ant all..."
   ant all || return
   if [ "$useHSQL" = "false" ]; then
     cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-ext.properties"  "$PATH_TO_BUNDLES/portal-ext.properties" && \
@@ -80,6 +88,7 @@ _showHelp() {
   echo "-dxp,                   Mount DXP bundle instead of CE one"
   echo "-hsql,                  Use hsql data base instead of MySQL"
   echo "-u,                     Update exiting mounted bundle"
+  echo "-sgc | skipGitClean,    Skip gitClean"
   echo "-ss | skipStartLiferay, Skip start Liferay after mount the bundle"
 }
 
