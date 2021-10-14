@@ -1,5 +1,5 @@
 function deployLiferay() {
-  local updateGitArguments=""
+  local updateGitArguments="-sgc "
   local mountBundleArguments=""
   while [ "$1" != "" ]; do
     case $1 in
@@ -8,12 +8,7 @@ function deployLiferay() {
       return 0
       ;;
     -dxp)
-      if [ -z "${updateGitArguments}" ]
-      then
-        updateGitArguments="${updateGitArguments}-dxp"
-      else
-        updateGitArguments="${updateGitArguments} -dxp"
-      fi
+      updateGitArguments="${updateGitArguments} -dxp"
       if [ -z "${mountBundleArguments}" ]
       then
         mountBundleArguments="${mountBundleArguments}-dxp"
@@ -22,28 +17,13 @@ function deployLiferay() {
       fi
       ;;
     -hsql)
-      if [ -z "${updateGitArguments}" ]
-      then
-        updateGitArguments="${updateGitArguments}-hsql"
-      else
-        updateGitArguments="${updateGitArguments} -hsql"
-      fi
+      updateGitArguments="${updateGitArguments} -hsql"
       ;;
     -u)
-      if [ -z "${updateGitArguments}" ]
-      then
-        updateGitArguments="${updateGitArguments}-u"
-      else
-        updateGitArguments="${updateGitArguments} -u"
-      fi
+      updateGitArguments="${updateGitArguments} -u"
       ;;
     -ss | skipStartLiferay)
-      if [ -z "${updateGitArguments}" ]
-      then
-        updateGitArguments="${updateGitArguments}-ss"
-      else
-        updateGitArguments="${updateGitArguments} -ss"
-      fi
+      updateGitArguments="${updateGitArguments} -ss"
       ;;
     *)
       echo "Invalid option"
