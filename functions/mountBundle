@@ -20,10 +20,10 @@ function mountBundle() {
       deleteBundle="false"
       ;;
     -sgc | skipGitClean)
-       startLiferay="false"
+       executeGitClean="false"
        ;;
     -ss | skipStartLiferay)
-      executeGitClean="false"
+      startLiferay="false"
       ;;
     *)
       echo "Invalid option"
