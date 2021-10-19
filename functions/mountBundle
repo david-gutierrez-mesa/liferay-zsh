@@ -26,7 +26,7 @@ function mountBundle() {
       startLiferay="false"
       ;;
     *)
-      echo "Invalid option"
+      echo "Invalid option '$1'"
       _showHelp "$0"
       return 0
       ;;

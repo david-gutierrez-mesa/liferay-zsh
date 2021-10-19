@@ -1,6 +1,5 @@
 function deployLiferay() {
-  local updateGitArguments=""
-  local mountBundleArguments="-sgc"
+  local deploy_DXP="false"
   while [ "$1" != "" ]; do
     case $1 in
     -h | -help)
@@ -8,34 +7,19 @@ function deployLiferay() {
       return 0
       ;;
     -dxp)
-      mountBundleArguments="${mountBundleArguments} -dxp"
-      if [ -z "${updateGitArguments}" ]
-      then
-        updateGitArguments="${updateGitArguments}-dxp"
-      else
-        updateGitArguments="${updateGitArguments} -dxp"
-      fi
-      ;;
-    -hsql)
-      mountBundleArguments="${mountBundleArguments} -hsql"
-      ;;
-    -u)
-      mountBundleArguments="${mountBundleArguments} -u"
-      ;;
-    -ss | skipStartLiferay)
-      mountBundleArguments="${mountBundleArguments} -ss"
-      ;;
-    *)
-      echo "Invalid option"
-      _showHelp "$0"
-      return 0
+      deploy_DXP="true"
       ;;
     esac
     shift
   done
 
-  updateGitLiferay "${updateGitArguments}" || return 1
-  mountBundle "${mountBundleArguments}" || return 1
+  if [ "$deploy_DXP" = "false" ]; then
+    updateGitLiferay -sgc || return 1
+  else
+    updateGitLiferay -sgc -dxp || return 1
+  fi
+
+  mountBundle -sgc "$@" || return 1
 
 }
 
