@@ -14,9 +14,9 @@ function deployLiferay() {
   done
 
   if [ "$deploy_DXP" = "false" ]; then
-    updateGitLiferay -sgc || return 1
+    updateGitLiferay || return 1
   else
-    updateGitLiferay -sgc -dxp || return 1
+    updateGitLiferay -dxp || return 1
   fi
 
   mountBundle -sgc "$@" || return 1
