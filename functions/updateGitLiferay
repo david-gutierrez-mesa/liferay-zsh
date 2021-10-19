@@ -10,7 +10,7 @@ function updateGitLiferay() {
       use_DXP="true"
       ;;
     *)
-      echo "Invalid option"
+      echo "Invalid option '$1'"
       _showHelp "$0"
       return 0
       ;;
@@ -18,10 +18,12 @@ function updateGitLiferay() {
     shift
   done
 
-  if [ "$use_DXP" = "true" ]; then
-    cd "$PATH_TO_DXP_PORTAL/" || return 1
-  else
+  if [ "$use_DXP" = "false" ]; then
+    echo "Updating Liferay Community Edition..."
     cd "$PATH_TO_PORTAL/" || return 1
+  else
+    echo "Updating Liferay DXP Edition..."
+    cd "$PATH_TO_DXP_PORTAL/" || return 1
   fi
 
   gitClean || return 1
@@ -32,14 +34,14 @@ function updateGitLiferay() {
   git push origin head || return 1
   ant setup-libs setup-sdk || return 1
 
-  if [ "$use_DXP" = "true" ]; then
-    echo "  Generating file test.$USER.properties in $PATH_TO_PORTAL "
-    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties" && \
-    sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_PORTAL/test.$USER.properties"
-  else
+  if [ "$use_DXP" = "false" ]; then
     echo "  Generating file test.$USER.properties in $PATH_TO_DXP_PORTAL "
     cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_DXP_PORTAL/test.$USER.properties" && \
     sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_DXP_PORTAL/test.$USER.properties"
+  else
+    echo "  Generating file test.$USER.properties in $PATH_TO_PORTAL "
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties" && \
+    sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_PORTAL/test.$USER.properties"
   fi
 }
 
