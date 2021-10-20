@@ -1,5 +1,6 @@
 function deployLiferay() {
   local deploy_DXP="false"
+  local deployLiferayParams=( "$@" )
   while [ "$1" != "" ]; do
     case $1 in
     -h | -help)
@@ -19,7 +20,7 @@ function deployLiferay() {
     updateGitLiferay -dxp || return 1
   fi
 
-  mountBundle -sgc "$@" || return 1
+  mountBundle -sgc "${deployLiferayParams[@]}" || return 1
 
 }
 
