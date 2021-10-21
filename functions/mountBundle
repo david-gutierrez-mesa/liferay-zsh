@@ -3,6 +3,7 @@ function mountBundle() {
   local deleteBundle="true"
   local useHSQL="false"
   local startLiferay="true"
+  local refreshIntellij="true"
   local executeGitClean="true"
   while [ "$1" != "" ]; do
     case $1 in
@@ -22,6 +23,9 @@ function mountBundle() {
     -sgc | skipGitClean)
        executeGitClean="false"
        ;;
+    -sri | skipRefreshIdea)
+      refreshIntellij="false"
+      ;;
     -ss | skipStartLiferay)
       startLiferay="false"
       ;;
@@ -72,7 +76,11 @@ function mountBundle() {
   sed -i '' "s+%PATH_BUNDLES%+$PATH_TO_BUNDLES+g" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
 
   gitClean || return
-  refreshIntellij || return
+
+  if [ "$refreshIntellij" = "true" ]; then
+    echo "Executing Refresh IntelliJ Idea..."
+    refreshIntellij || return
+  fi
 
   if [ "$startLiferay" = "true" ]; then
       startLiferay || return
@@ -88,7 +96,8 @@ _showHelp() {
   echo "-dxp,                   Mount DXP bundle instead of CE one"
   echo "-hsql,                  Use hsql data base instead of MySQL"
   echo "-u,                     Update exiting mounted bundle"
-  echo "-sgc | skipGitClean,    Skip gitClean"
+  echo "-sri | skipRefreshIdea, Skip Refresh IntelliJ Idea files for Liferay"
+  echo "-sgc | skipGitClean,    Skip first gitClean"
   echo "-ss | skipStartLiferay, Skip start Liferay after mount the bundle"
 }
 
