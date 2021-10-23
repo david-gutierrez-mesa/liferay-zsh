@@ -78,7 +78,7 @@ function mountBundle() {
     sed -i '' "s/%JDBC_USER%/$MYSQL_USER/g" "$PATH_TO_BUNDLES/portal-ext.properties" && \
     sed -i '' "s/%JDBC_PASSWORD%/$MYSQL_PASSWORD/g" "$PATH_TO_BUNDLES/portal-ext.properties"
 
-    if [ "$deploy_Lol" = "false" ]; then
+    if [ "$deploy_Lol" = "true" ]; then
       echo 'include-and-override=portal-liferay-online.properties' >> "$PATH_TO_BUNDLES/portal-ext.properties"
     fi
 
