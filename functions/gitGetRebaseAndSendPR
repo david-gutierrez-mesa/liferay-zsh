@@ -3,6 +3,7 @@ function gitGetRebaseAndSendPR() {
   local usernameFrom
   local usernameTo
   local skipUpdateGitLiferay="false"
+  local skipPoshiValidation="false"
 
   while [ "$1" != "" ]; do
     case $1 in
@@ -22,7 +23,10 @@ function gitGetRebaseAndSendPR() {
       shift
       usernameTo="$1"
       ;;
-    -sud | -skipupdategitliferay)
+    -spv | -skipPoshiValidation)
+      skipPoshiValidation="true"
+      ;;
+    -sud | -skipUpdateGitLiferay)
       skipUpdateGitLiferay="true"
       ;;
     *)
@@ -68,10 +72,12 @@ function gitGetRebaseAndSendPR() {
       return
     }
     echo "Running Poshi validations"
-    poshiSFCommit || {
-      echo 'Impossible to commit. Source Formatted failed'
-      return
-    }
+    if [ "$skipPoshiValidation" = "false" ]; then
+      poshiSFCommit || {
+        echo 'Impossible to commit. Source Formatted failed'
+        return
+      }
+    fi
     echo "Sending to me"
     local PR_TITLE
     PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
@@ -99,7 +105,8 @@ _showHelp() {
   echo "-pr,                                Pull request number be rebased and resend. Mandatory"
   echo "-uf,                                User to get the PR from. If not set then $GITHUB_USER is used"
   echo "-ut,                                User to send the PR to. If not set then $GITHUB_USER is used"
-  echo "-sud | -skipupdategitliferay),      Skip update remote liferay repository before getting the PR and Rebase"
+  echo "-spv | -skipPoshiValidation),       Skip poshi validations"
+  echo "-sud | -skipUpdateGitLiferay),      Skip update remote liferay repository before getting the PR and Rebase"
 
 }
 
