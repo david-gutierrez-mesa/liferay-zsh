@@ -23,7 +23,7 @@ function gitGetPRFromEchoUser() {
       echo " "
       _showHelp "$0"
     else
-        gh pr -u liferay-echo $pullRequest
+        gitGetPR -u liferay-echo -pr $pullRequest
     fi
 }
 

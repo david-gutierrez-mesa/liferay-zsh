@@ -1,0 +1,52 @@
+function gitGetPR() {
+  local pullRequest
+  local usernameFrom
+  while [ "$1" != "" ]; do
+    case $1 in
+    -pr | -pullRequest)
+      shift
+      pullRequest="$1"
+      ;;
+    -u)
+      shift
+      usernameFrom="$1"
+     ;;
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+    if [ -z "$pullRequest" ]; then
+      echo "Add a Pull Request number to get"
+      echo " "
+      _showHelp "$0"
+    else
+          local FROM_USER
+          if [ -z "$usernameFrom" ]; then
+            FROM_USER=$GITHUB_USER
+          else
+            FROM_USER=$usernameFrom
+          fi
+        gh pr -u $FROM_USER $pullRequest
+    fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function get a Pull Request from given User"
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-h | -help,         Show brief help"
+  echo "-pr | -poshiTest,   Pull Request number to be get. Mandatory"
+  echo "-u,                 User to get the PR from. If not set then $GITHUB_USER is used"
+}
+
+gitGetPR "$@"
