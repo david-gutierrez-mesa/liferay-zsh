@@ -66,7 +66,7 @@ function gitRebaseContinueAndSendPR() {
     }
     echo "Running Poshi validations"
     poshiSFCommit || {
-      echo 'Impossible to commit. Source Formated failed'
+      echo 'Impossible to commit. Source Formatted failed'
       return
     }
     echo "Sending to me"
@@ -88,7 +88,7 @@ function gitRebaseContinueAndSendPR() {
 
 function gitRebaseBriansContinueAndSendPR() {
   if [ -z "$PR_NUMBER_TO_BCHAN" ]; then
-    echo "You didn' run gitGetFailingPRAndSendToBrian before"
+    echo "You didn't run gitGetFailingPRAndSendToBrian before"
   else
     gitRebaseContinue || {
       echo 'Rebase failed. Fix rebase and continue manually with gitRebaseContinueAndSendPR'
