@@ -1,31 +1,64 @@
 function gitPush() {
+  local runSF="true"
+  local force="false"
+  if [ -z "$(git status --porcelain)" ]; then
+    local BRANCH_NAME
     while [ "$1" != "" ]; do
-    case $1 in
-    -h | -help)
-      _showHelp "$0"
-      return 0
-      ;;
-    *)
-      echo "Invalid option"
-      _showHelp "$0"
-      return 0
-      ;;
-    esac
-    shift
-  done
-  local CURRENT_BRANCH
-  CURRENT_BRANCH=$(git branch --show-current)
-  git push --set-upstream origin "$CURRENT_BRANCH"
+      case $1 in
+      -h | -help)
+        _showHelp "$0"
+        return 0
+        ;;
+      -br)
+        shift
+        BRANCH_NAME="$1"
+        ;;
+      -f | -force)
+        force="true"
+        ;;
+      -ssf | -skipSF)
+        runSF="false"
+        ;;
+      *)
+        echo "Invalid option"
+        _showHelp "$0"
+        return 0
+        ;;
+      esac
+      shift
+    done
+    if [ -z "$BRANCH_NAME" ]; then
+      BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD | cut -d " " -f 1)
+    fi
+    if [ "$runSF" = "true" ]; then
+      poshiSFCommit || {
+        echo 'Impossible to commit. Source Formatted failed'
+        return
+      }
+    else
+      echo "Skipping Poshi Validation and SF"
+    fi
+    if [ "$force" = "false" ]; then
+      echo "Pushing branch $BRANCH_NAME"
+      git push --set-upstream origin "$BRANCH_NAME"
+    else
+      echo "Force pushing branch $BRANCH_NAME"
+      git push --set-upstream -f origin "$BRANCH_NAME"
+    fi
+  else
+    echo "You have uncommitted changes. Commit before try to send"
+  fi
 }
 
 _showHelp() {
   echo "Function help:"
-  echo "This function runs:"
-  echo "  git push --set-upstream origin $CURRENT_BRANCH "
   echo "$1 [options]"
   echo " "
   echo "options:"
+  echo "-br,              Branch to be forced committed. If not set, current on is committed"
+  echo "-f | -force,      Force delete the branch"
   echo "-h | -help,       Show brief help"
+  echo "-ssf | -skipSF,   Skip Poshi validation and Source Formatter"
 }
 
 gitPush "$@"
