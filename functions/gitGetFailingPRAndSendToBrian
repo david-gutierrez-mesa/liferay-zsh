@@ -51,7 +51,7 @@ function gitGetFailingPRAndSendToBrian() {
     }
     echo "Running Poshi validations"
     poshiSFCommit || {
-      echo 'Impossible to commit. Source Formated failed'
+      echo 'Impossible to commit. Source Formatted failed'
       return
     }
     echo "Sending to Brian"
