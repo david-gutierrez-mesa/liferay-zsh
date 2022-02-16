@@ -35,4 +35,4 @@ _showHelp() {
   echo "-h | -help,       Show brief help"
 }
 
-gitPush "$@"
+gitResetOriginToUpstream "$@"
