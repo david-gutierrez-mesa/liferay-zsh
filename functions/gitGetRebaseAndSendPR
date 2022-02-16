@@ -78,7 +78,7 @@ function gitGetRebaseAndSendPR() {
         return
       }
     fi
-    echo "Sending to me"
+    echo "Sending to $TO_USER"
     local PR_TITLE
     PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
     local PR_MESSAGE=""
