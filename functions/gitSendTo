@@ -38,7 +38,7 @@ gitSendTo() {
         return
       }
     else
-      echo "Skipping Poshi Validationa and SF"
+      echo "Skipping Poshi Validation and SF"
     fi
     local prOptions=""
     local LPS_ID
