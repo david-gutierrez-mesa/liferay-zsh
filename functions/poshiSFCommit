@@ -22,6 +22,7 @@ function poshiSFCommit() {
     if [ -z "$(git status --porcelain)" ]; then
       echo "There are not Source Formatted changes to commit"
     else
+      rm -f "$PATH_TO_PORTAL/portal-web/poshi-ext.properties"
       local LPS_ID
       LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
       local message
