@@ -15,7 +15,11 @@ function poshiValidation() {
     shift
   done
 
-  ant -f build-test.xml run-poshi-validation
+  if isThisALiferayRepo; then
+    ant -f build-test.xml run-poshi-validation
+  else
+     echo "This is not a liferay-portal. Skipping Poshi validation here"
+  fi
 }
 
 _showHelp() {

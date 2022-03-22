@@ -15,11 +15,15 @@ function poshiSF() {
     shift
   done
 
-  sf &&
-  cd $PATH_TO_PORTAL/modules/ &&
-  ../gradlew -b util.gradle formatSourceCurrentBranch &&
-  cd .. &&
-  poshiValidation
+  if isThisALiferayRepo; then
+    sf &&
+    cd $PATH_TO_PORTAL/modules/ &&
+    ../gradlew -b util.gradle formatSourceCurrentBranch &&
+    cd .. &&
+    poshiValidation
+  else
+     echo "This is not a liferay-portal. Skipping Poshi Source Formatter"
+  fi
 }
 
 _showHelp() {

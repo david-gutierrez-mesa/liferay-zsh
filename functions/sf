@@ -20,13 +20,17 @@ function sf() {
     shift
   done
 
-  cd $PATH_TO_PORTAL/portal-impl/ || return
-  if [ "$local_changes" = "true" ]; then
-    ant format-source-local-changes
+  if isThisALiferayRepo; then
+    cd $PATH_TO_PORTAL/portal-impl/ || return
+    if [ "$local_changes" = "true" ]; then
+      ant format-source-local-changes
+    else
+      ant format-source-current-branch
+    fi
+    cd $PATH_TO_PORTAL/ || return
   else
-    ant format-source-current-branch
+     echo "This is not a liferay-portal. You can not run Liferay Source Formatter here"
   fi
-  cd $PATH_TO_PORTAL/ || return
 }
 
 _showHelp() {

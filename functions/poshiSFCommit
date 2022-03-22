@@ -14,25 +14,29 @@ function poshiSFCommit() {
     shift
   done
 
-  if [ -z "$(git status --porcelain)" ]; then
-    poshiSF || {
-      echo 'Source Formatted failed. Check logs and fix'
-      exit 1
-    }
+  if isThisALiferayRepo; then
     if [ -z "$(git status --porcelain)" ]; then
-      echo "There are not Source Formatted changes to commit"
+      poshiSF || {
+        echo 'Source Formatted failed. Check logs and fix'
+        exit 1
+      }
+      if [ -z "$(git status --porcelain)" ]; then
+        echo "There are not Source Formatted changes to commit"
+      else
+        rm -f "$PATH_TO_PORTAL/portal-web/poshi-ext.properties"
+        local LPS_ID
+        LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
+        local message
+        message="$LPS_ID SF"
+        git add .
+        git commit -m "$message"
+        echo "Source formatted committed as $message"
+      fi
     else
-      rm -f "$PATH_TO_PORTAL/portal-web/poshi-ext.properties"
-      local LPS_ID
-      LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
-      local message
-      message="$LPS_ID SF"
-      git add .
-      git commit -m "$message"
-      echo "Source formatted committed as $message"
+      echo "You have uncommitted changes. Commit before do Source Formatter"
     fi
   else
-    echo "You have uncommitted changes. Commit before do Source Formatter"
+     echo "This is not a liferay-portal. Skipping Poshi Source Formatter"
   fi
 }
 

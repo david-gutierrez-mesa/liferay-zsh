@@ -31,19 +31,23 @@ function runPoshiTest() {
     esac
     shift
   done
-    if [ -z "$poshiTest" ]; then
-      echo "Add a Poshi test to be executed"
-      echo " "
-      _showHelp "$0"
-    else
-      cd $PATH_TO_PORTAL/ && \
-      if [ ! -d "./test.$USER.properties" ]; then
-          cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties" && \
-          sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
+    if isThisALiferayRepo; then
+      if [ -z "$poshiTest" ]; then
+        echo "Add a Poshi test to be executed"
+        echo " "
+        _showHelp "$0"
+      else
+        cd $PATH_TO_PORTAL/ && \
+        if [ ! -d "./test.$USER.properties" ]; then
+            cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties" && \
+            sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
+        fi
+        ant -f build-test.xml run-selenium-test -Dtest.class=$poshiTest && \
+        _openPoshiResults $poshiTest && \
       fi
-      ant -f build-test.xml run-selenium-test -Dtest.class=$poshiTest && \
-      _openPoshiResults $poshiTest && \
-    fi
+  else
+     echo "This is not a liferay-portal. You can not run poshi test here"
+  fi
 }
 
 _openPoshiResults() {
