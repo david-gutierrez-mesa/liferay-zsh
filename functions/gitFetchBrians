@@ -13,7 +13,11 @@ function gitFetchBrians() {
     esac
     shift
   done
-  git fetch brianchandotcom master
+  if isThisALiferayRepo; then
+    git fetch brianchandotcom master
+  else
+     echo "This is not a liferay-portal. You can not rebase Brian's Origin here"
+  fi
 }
 
 _showHelp() {

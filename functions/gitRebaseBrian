@@ -13,7 +13,11 @@ function gitRebaseBrian() {
     esac
     shift
   done
+  if isThisALiferayRepo; then
    git rebase brianchandotcom/master
+  else
+     echo "This is not a liferay-portal. You can not rebase from Brian's origin here"
+  fi
 }
 
 _showHelp() {
