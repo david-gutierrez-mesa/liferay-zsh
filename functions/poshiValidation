@@ -18,7 +18,7 @@ function poshiValidation() {
   if isThisALiferayRepo; then
     ant -f build-test.xml run-poshi-validation
   else
-     echo "This is not a liferay-portal. Skipping Poshi Source Formatter"
+     echo "This is not a liferay-portal. Skipping Poshi validation here"
   fi
 }
 

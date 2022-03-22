@@ -16,7 +16,7 @@ function gitFetchBrians() {
   if isThisALiferayRepo; then
     git fetch brianchandotcom master
   else
-     echo "This is not a liferay-portal. You can not rebase Brian's Origin here"
+     echo "This is not a liferay-portal. You can not fetch Brian's Origin here"
   fi
 }
 
