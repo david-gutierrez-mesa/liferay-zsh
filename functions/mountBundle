@@ -50,13 +50,8 @@ function mountBundle() {
     stopLiferay
   fi
 
-  if [ "$deploy_DXP" = "false" ]; then
-    echo "Deploying Liferay Community Edition..."
-    cd "$PATH_TO_PORTAL/" || return
-  else
-    echo "Deploying Liferay DXP Edition..."
-    cd "$PATH_TO_DXP_PORTAL/" || return
-  fi
+  cd "$PATH_TO_PORTAL/" || return
+
   if [ "$deleteBundle" = "true" ]; then
     echo "Deleting /bundles folder and cleaning DB..."
     rm -rf ../bundles
@@ -67,8 +62,10 @@ function mountBundle() {
       gitClean || return
   fi
   if [ "$deploy_DXP" = "false" ]; then
+    echo "Deploying Liferay Community Edition..."
     ant setup-profile-portal
   else
+    echo "Deploying Liferay DXP Edition..."
     ant setup-profile-dxp
   fi
   echo "Running ant all..."
@@ -106,9 +103,10 @@ _showHelp() {
   echo "-dxp,                   Mount DXP bundle instead of CE one"
   echo "-h | -help,             Show brief help"
   echo "-hsql,                  Use hsql data base instead of MySQL"
+  echo "-lol,                   Deploy Liferay On-Line bundle"
   echo "-u,                     Update exiting mounted bundle"
-  echo "-sri | skipRefreshIdea, Skip Refresh IntelliJ Idea files for Liferay"
   echo "-sgc | skipGitClean,    Skip first gitClean"
+  echo "-sri | skipRefreshIdea, Skip Refresh IntelliJ Idea files for Liferay"
   echo "-ss | skipStartLiferay, Skip start Liferay after mount the bundle"
 }
 
