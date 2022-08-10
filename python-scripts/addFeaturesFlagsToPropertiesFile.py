@@ -80,11 +80,12 @@ if __name__ == "__main__":
 
     path = Path(properties_file_path)
     if path.is_file():
-        match feature_flag_team:
-            case 'echo':
-                ff_to_enable = get_echo_feature_flags()
-            case _:
-                ff_to_enable = get_all_feature_flags()
+        if "," in feature_flag_team:
+            ff_to_enable = feature_flag_team.split(",")
+        elif feature_flag_team == 'echo':
+            ff_to_enable = get_echo_feature_flags()
+        else:
+            ff_to_enable = get_all_feature_flags()
 
         set_feature_flags_to_properties_file(ff_to_enable)
     else:
