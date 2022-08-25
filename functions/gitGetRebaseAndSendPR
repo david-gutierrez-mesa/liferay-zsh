@@ -59,7 +59,10 @@ function gitGetRebaseAndSendPR() {
     gitMaster
     if [ "$skipUpdateGitLiferay" = "false" ]; then
       echo 'Updating git before rebase'
-      updateGitLiferay
+      updateGitLiferay || {
+        echo 'Updating git failed. Please fix issue and retry'
+        return
+         }
     fi
 
     gh pr -u $FROM_USER $PR_NUMBER || {
