@@ -49,7 +49,7 @@ function deployModule() {
 
 _showHelp() {
   echo "Function help:"
-  echo "This function get a Pull Request from Echo User"
+  echo "This function deploys the passed modules"
   echo " "
   echo "$1 [options]"
   echo "options:"
