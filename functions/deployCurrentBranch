@@ -1,0 +1,81 @@
+function deployCurrentBranch() {
+    while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      readMoreModules="false"
+      return 0
+      ;;
+    *)
+       if [ "$readMoreModules" = "true" ]; then
+         modules="$modules $1"
+      else
+         echo "Invalid option"
+         _showHelp "$0"
+         return 0
+      fi
+      ;;
+    esac
+    shift
+  done
+  BRANCH=${1:-master}
+  files=($(git diff --name-only "$BRANCH"..))
+  if [ ${#files[@]} -eq 0 ]; then
+  	echo "No files changed in this PR"
+  	exit 0
+  fi
+  TEMP_DIR=''
+  for i in "${files[@]}"
+  do
+  	if _isDifferentModule "$i" "$TEMP_DIR";
+  	then
+  		TEMP_DIR=$(_getModulePath "$i")
+
+  		_deploy "$TEMP_DIR"
+  	fi
+  done
+}
+
+_deploy() {
+ 	echo "Deploying $(basename "$1")..."
+ 	eval "(cd \"\$1\" && gw deploy -a)"
+ }
+
+_getModulePath() {
+ 	START=$(realpath "$1" | xargs dirname)
+  	while true; do
+ 		if [ -f "$START/build.gradle" ]; then
+ 			break
+ 		fi
+ 		if [ "$DIR" = "/" ]; then
+ 			echo "error: no build.gradle found in $PWD or any of its ancestors"
+ 			exit 1
+ 		fi
+ 		START=$(dirname "$START")
+ 	done
+ 	echo "$START"
+ }
+
+_isDifferentModule() {
+	if [ -z "$2" ]
+	then
+		return 0
+	fi
+	if [[ "$(realpath "$1" --relative-to="$2")" == ..* ]]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function deploys modules based in current branch changes"
+  echo " "
+  echo "$1 [options]"
+  echo "options:"
+  echo "-h | -help,         Show brief help"
+}
+
+deployCurrentBranch "$@"
