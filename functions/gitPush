@@ -56,7 +56,7 @@ _showHelp() {
   echo " "
   echo "options:"
   echo "-br,              Branch to be forced committed. If not set, current on is committed"
-  echo "-f | -force,      Force delete the branch"
+  echo "-f | -force,      Force the push"
   echo "-h | -help,       Show brief help"
   echo "-ssf | -skipSF,   Skip Poshi validation and Source Formatter"
 }
