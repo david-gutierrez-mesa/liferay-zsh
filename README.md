@@ -39,7 +39,7 @@ git remote add upstream https://github.com/liferay/liferay-portal-ee.git
 git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal-ee.git
 ```
 
-### Dependencies for testray.py
+### Dependencies for python scripts
 #### Install python (if you don't have it)
 ```bash
 brew install python
@@ -48,10 +48,9 @@ brew install python
 #### Install pip
 Homebrew installs pip pointing to the Homebrew’d Python 3 for you.
 
-#### Install requests and keyring
+#### Install dependencies
 ```bash
-sudo pip install requests
-sudo pip install keyring
+pip install -r python-scripts/requirements.txt
 ```
 
 ### jira-cli
@@ -73,6 +72,11 @@ sudo jira config
 Install it from here https://dev.mysql.com/downloads/file/?id=503070
 
 Set same user and password you have in your .liferay-zsh.config file
+
+### Coreutils fro Mac
+```bash
+brew install coreutils
+```
 
 ## liferay-zsh installation
 

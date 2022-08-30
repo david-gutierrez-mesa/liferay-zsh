@@ -2,6 +2,7 @@ function mountBundle() {
   local deploy_DXP="false"
   local deploy_Lol="false"
   local deleteBundle="true"
+  local enableFeatureFlags="false"
   local useHSQL="false"
   local startLiferay="true"
   local refreshIntellij="true"
@@ -14,6 +15,9 @@ function mountBundle() {
       ;;
     -dxp)
       deploy_DXP="true"
+      ;;
+    -eff)
+      enableFeatureFlags="true"
       ;;
     -hsql)
       useHSQL="true"
@@ -83,6 +87,11 @@ function mountBundle() {
   cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-setup-wizard.properties" "$PATH_TO_BUNDLES/portal-setup-wizard.properties" && \
   sed -i '' "s+%PATH_BUNDLES%+$PATH_TO_BUNDLES+g" "$PATH_TO_BUNDLES/portal-setup-wizard.properties"
 
+  if [ "$enableFeatureFlags" = "true" ]; then
+    echo "Enabling all feature flags..."
+    "$LIFERAY_ZSH_INSTALLATION_PATH/python-scripts/addFeaturesFlagsToPropertiesFile.py" "$PATH_TO_BUNDLES/portal-ext.properties" all
+  fi
+
   gitClean || return
 
   if [ "$refreshIntellij" = "true" ]; then
@@ -101,6 +110,7 @@ _showHelp() {
   echo " "
   echo "options:"
   echo "-dxp,                   Mount DXP bundle instead of CE one"
+  echo "-eff,                   Enable all feature flags"
   echo "-h | -help,             Show brief help"
   echo "-hsql,                  Use hsql data base instead of MySQL"
   echo "-lol,                   Deploy Liferay On-Line bundle"
