@@ -48,10 +48,9 @@ brew install python
 #### Install pip
 Homebrew installs pip pointing to the Homebrew’d Python 3 for you.
 
-#### Install requests and keyring
+#### Install dependencies
 ```bash
-sudo pip install requests
-sudo pip install keyring
+pip install -r python-scripts/requirements.txt
 ```
 
 ### jira-cli
