@@ -2,3 +2,4 @@
 /deployments/
 /venv/
 python-scripts/__pycache__/
+.DS_Store
