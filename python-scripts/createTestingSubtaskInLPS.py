@@ -4,12 +4,7 @@ import manageCredentialsCrypto
 if __name__ == "__main__":
     login = manageCredentialsCrypto.get_credentials()
     jira = JIRA("https://issues.liferay.com", basic_auth=login)
-    stories_without_testing_subtask = jira.search_issues(
-        'project = LPS AND (component in (componentsLeadByUser(team-echo))) AND issuetype = Story AND '
-        'status in (\"In Development\", \"In QA\", \"In PM Review\", \"Ready for QA\", \"Ready for Product Validation\") AND '
-        '(labels not in (echo-board-out) OR labels is EMPTY) AND'
-        '(issueFunction not in parentsOf(\"summary ~ \\\"Test Scenarios Coverage | Backend\\\"\") or '
-        'issueFunction not in parentsOf(\"summary ~ \\\"Test Scenarios Coverage | Frontend\\\"\"))')
+    stories_without_testing_subtask = jira.search_issues('filter=54572')
     for story in stories_without_testing_subtask:
         needs_backend = True
         needs_frontend = True
