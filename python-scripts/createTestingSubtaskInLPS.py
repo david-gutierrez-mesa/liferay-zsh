@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from jira import JIRA
 import manageCredentialsCrypto
 
