@@ -6,7 +6,7 @@ import manageCredentialsCrypto
 if __name__ == "__main__":
     login = manageCredentialsCrypto.get_credentials()
     jira = JIRA("https://issues.liferay.com", basic_auth=login)
-    stories_without_testing_subtask = jira.search_issues('filter=54594')
+    stories_without_testing_subtask = jira.search_issues('filter=54596')
     for story in stories_without_testing_subtask:
         test_creation = True
         test_validation = True
