@@ -18,8 +18,7 @@ if __name__ == "__main__":
             elif summary == 'Product QA | Test Validation - Round 1':
                 test_validation = False
             elif summary == 'Product QA | Automation Test Creation':
-            automation_test_creation = False
-
+                automation_test_creation = False
 
         components = []
         for component in story.fields.components:
@@ -29,7 +28,8 @@ if __name__ == "__main__":
             subtask_test_creation = {
                 'project': {'key': 'LPS'},
                 'summary': 'Test Scenarios Coverage | Test Creation',
-                'description': 'Define the test scenarios of the parent epic. Instructions [here |https://liferay.atlassian.net/l/c/Ed0yE1to].'
+                'description': 'Define the test scenarios of the parent epic. Instructions [here '
+                               '|https://liferay.atlassian.net/l/c/Ed0yE1to].',
                 'issuetype': {'name': 'Technical Testing'},
                 'components': components,
                 'parent': {'id': story.id},
@@ -41,7 +41,8 @@ if __name__ == "__main__":
             subtask_test_validation = {
                 'project': {'key': 'LPS'},
                 'summary': 'Product QA | Test Validation - Round 1',
-                'description': 'Execute the tests of the parent epic. Instructions [here|https://liferay.atlassian.net/l/c/VURAf9A3].'
+                'description': 'Execute the tests of the parent epic. Instructions ['
+                               'here|https://liferay.atlassian.net/l/c/VURAf9A3].',
                 'issuetype': {'name': 'Technical Testing'},
                 'components': components,
                 'parent': {'id': story.id},
@@ -53,7 +54,8 @@ if __name__ == "__main__":
             subtask_test_automation = {
                 'project': {'key': 'LPS'},
                 'summary': 'Product QA | Automation Test Creation',
-                'description': 'Create test automation to validate the critical test scenarios/cases of the related story. Instructions [here|https://liferay.atlassian.net/l/c/FUSUocqi].'
+                'description': 'Create test automation to validate the critical test scenarios/cases of the related '
+                               'story. Instructions [here|https://liferay.atlassian.net/l/c/FUSUocqi].',
                 'issuetype': {'name': 'Technical Testing'},
                 'components': components,
                 'parent': {'id': story.id},
