@@ -9,6 +9,7 @@ if __name__ == "__main__":
     jira = JIRA("https://issues.liferay.com", basic_auth=login)
     stories_without_testing_subtask = jira.search_issues('filter=54596')
     for story in stories_without_testing_subtask:
+        print("Creating sub-task for story " + story.id)
         test_creation = True
         test_validation = True
         automation_test_creation = True
@@ -36,7 +37,7 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_test_creation)
-            print("Created sub-task: " + child.key + " for story " + story.id)
+            print("* Created sub-task: " + child.key)
 
         if test_validation:
             subtask_test_validation = {
@@ -49,7 +50,7 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_test_validation)
-            print("Created sub-task: " + child.key + " for story " + story.id)
+            print("* Created sub-task: " + child.key)
 
         if automation_test_creation:
             subtask_test_automation = {
@@ -62,6 +63,6 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_test_automation)
-            print("Created sub-task: " + child.key + " for story " + story.id)
+            print("* Created sub-task: " + child.key)
 
     print("Subtasks for Headless team are up to date")

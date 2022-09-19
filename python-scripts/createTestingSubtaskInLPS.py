@@ -4,11 +4,12 @@ from jira import JIRA
 import manageCredentialsCrypto
 
 if __name__ == "__main__":
-    print("Creating subtasks for Echo team")
+    print("Creating subtasks for Echo team...")
     login = manageCredentialsCrypto.get_credentials()
     jira = JIRA("https://issues.liferay.com", basic_auth=login)
     stories_without_testing_subtask = jira.search_issues('filter=54572')
     for story in stories_without_testing_subtask:
+        print("Creating sub-task for story " + story.id)
         needs_backend = True
         needs_frontend = True
         for subtask in story.fields.subtasks:
@@ -34,7 +35,7 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_backend)
-            print("Created sub-task: " + child.key + " for story " + story.id)
+            print("* Created sub-task: " + child.key)
 
         if needs_frontend:
             subtask_frontend = {
@@ -49,6 +50,6 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_frontend)
-            print("Created sub-task: " + child.key + " for story " + story.id)
+            print("* Created sub-task: " + child.key)
 
     print("Subtasks for Echo team are up to date")
