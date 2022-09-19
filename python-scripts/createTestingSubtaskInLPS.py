@@ -4,6 +4,7 @@ from jira import JIRA
 import manageCredentialsCrypto
 
 if __name__ == "__main__":
+    print("Creating subtasks for Echo team")
     login = manageCredentialsCrypto.get_credentials()
     jira = JIRA("https://issues.liferay.com", basic_auth=login)
     stories_without_testing_subtask = jira.search_issues('filter=54572')
@@ -33,7 +34,7 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_backend)
-            print("Created sub-task: " + child.key)
+            print("Created sub-task: " + child.key + " for story " + story.id)
 
         if needs_frontend:
             subtask_frontend = {
@@ -48,5 +49,6 @@ if __name__ == "__main__":
                 'parent': {'id': story.id},
             }
             child = jira.create_issue(fields=subtask_frontend)
-            print("Created sub-task: " + child.key)
+            print("Created sub-task: " + child.key + " for story " + story.id)
 
+    print("Subtasks for Echo team are up to date")
