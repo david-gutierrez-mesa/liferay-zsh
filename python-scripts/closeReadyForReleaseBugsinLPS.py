@@ -17,6 +17,7 @@ if __name__ == "__main__":
                 fields={'fixVersions': fixVersion}
             )
         jira.transition_issue(bug_id, transition='Closed')
-        jira.add_comment(bug_id, 'Closing directly since we are not considering Ready for Release status so far')
+        jira.add_comment(bug_id, 'Closing directly since we are not considering Ready for Release status so far',
+                         visibility={'type': 'group', 'value': 'liferay-qa'})
 
     print("Ready for Release status are closed")
