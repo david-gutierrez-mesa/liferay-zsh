@@ -10,7 +10,7 @@ if __name__ == "__main__":
     bugs_in_ready_for_release = jira.search_issues('filter=54632')
     for bug in bugs_in_ready_for_release:
         bug_id = bug.id
-        print("Closing ", bug_id)
+        print("Closing ", bug.key)
         if not bug.fields.fixVersions:
             fixVersion = [{'name': 'Master'}]
             bug.update(
