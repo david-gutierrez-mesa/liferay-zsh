@@ -38,7 +38,7 @@ function gitGetPRTitle() {
       FROM_USER=$username
     fi
     local PR_TITLE
-    PR_TITLE=$(gh pr -u $FROM_USER --info $pullRequest 2>/dev/null | sed -n 1p | cut -d'@' -f 1 | sed "s/^[^ ]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+    PR_TITLE=$(gh pr view $pullRequest --repo $FROM_USER/"$REPO" --json title --template '{{.title}}' | head -n 1 | awk  '{print $1}')
     echo "$PR_TITLE"
   fi
 }

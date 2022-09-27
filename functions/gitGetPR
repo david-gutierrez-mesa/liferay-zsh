@@ -34,7 +34,7 @@ function gitGetPR() {
           else
             FROM_USER=$usernameFrom
           fi
-        gh pr -u $FROM_USER $pullRequest
+        gh pr checkout "$pullRequest" --repo "$FROM_USER"/"$REPO"
     fi
 }
 

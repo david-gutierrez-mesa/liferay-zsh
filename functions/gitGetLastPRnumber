@@ -1,5 +1,5 @@
 function gitGetLastPRnumber() {
-  local localGitUser
+  local FROM_USER=$GITHUB_USER
   while [ "$1" != "" ]; do
     case $1 in
     -h | -help)
@@ -8,7 +8,7 @@ function gitGetLastPRnumber() {
       ;;
     -u)
       shift
-      localGitUser="$1"
+      FROM_USER="$1"
       ;;
     *)
       echo "Invalid option"
@@ -18,10 +18,7 @@ function gitGetLastPRnumber() {
     esac
     shift
   done
-  if [ -z "$localGitUser" ]; then
-    localGitUser=$GITHUB_USER
-  fi
-  echo $(gh pr --list -u $localGitUser -m --sort created --direction desc | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g' | sed -n 7p | cut -d'(' -f 1 | sed "s/^[^#]* //" | cut -d' ' -f 1)
+  echo $(gh pr list --repo "$FROM_USER"/"$REPO" | head -n 1 | awk  '{print $1}')
 }
 
 _showHelp() {

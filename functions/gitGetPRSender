@@ -37,7 +37,7 @@ function gitGetPRSender() {
       FROM_USER=$username
     fi
     local PR_SENDER
-    PR_SENDER=$(gh pr -u $FROM_USER --info $pullRequest 2>/dev/null | sed -n 1p | cut -d'(' -f 1 | sed "s/^[^@]* //" | gsed 's/\x1b\[[0-9;]*[a-zA-Z]//g')
+    PR_SENDER=$(gh pr view $pullRequest --repo $FROM_USER/"$REPO"  --json author --template '{{.author}}' 2>/dev/null | cut -d':' -f 2 | sed 's/.$//')
     echo "$PR_SENDER"
   fi
 }
