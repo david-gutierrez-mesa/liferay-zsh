@@ -36,12 +36,13 @@ function gitGetFailingPRAndSendToBrian() {
       FROM_USER=$GITHUB_USER
     fi
 
+    # shellcheck disable=SC2086
     echo 'Getting PR' $PR_NUMBER_TO_BCHAN 'from user' $FROM_USER
 
     gitMaster
     gitFetchBrians
-    gh pr -u $FROM_USER $PR_NUMBER_TO_BCHAN || {
-      echo 'Impossible to get PR ' $PR_NUMBER_TO_BCHAN ' from user ' $FROM_USER
+    gh pr checkout "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$REPO" || {
+      echo 'Impossible to get PR ' "$PR_NUMBER_TO_BCHAN" ' from user ' $FROM_USER
       return
     }
     echo "Rebasing"
@@ -58,13 +59,13 @@ function gitGetFailingPRAndSendToBrian() {
     local PR_TITLE
     local PR_MESSAGE
     local PR_MESSAGE
-    PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
+    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
     if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
     else
-      PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER_TO_BCHAN -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
     fi
-    gh pr -s brianchandotcom --title "$PR_TITLE" --description "$PR_MESSAGE"
+    gh pr create --repo "brianchandotcom/$REPO" --title "$PR_TITLE" --description "$PR_MESSAGE"
     unset PR_NUMBER_TO_BCHAN
 }
 

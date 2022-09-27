@@ -22,7 +22,7 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 # LIFERAY
-
+export REPO="liferay-portal"
 export PATH_TO_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal"
 export PATH_TO_DXP_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal-ee"
 export PATH_TO_BUNDLES="$PATH_TO_LIFERAY_MAIN/bundles"

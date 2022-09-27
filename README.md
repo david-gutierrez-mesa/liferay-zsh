@@ -11,8 +11,8 @@ Download and install https://www.java.com/es/download/
 ### Oh-My-ZSH
 https://github.com/ohmyzsh/ohmyzsh
 
-### Node GH
-http://nodegh.io/
+### GitHub CLI
+https://cli.github.com/
 
 ### GNU-sed
 ```bash

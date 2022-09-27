@@ -40,7 +40,6 @@ gitSendTo() {
     else
       echo "Skipping Poshi Validation and SF"
     fi
-    local prOptions=""
     local LPS_ID
     LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
     if [ "$updatePullRequest" = "true" ]; then
@@ -49,11 +48,11 @@ gitSendTo() {
       local PR_TITLE="$LPS_ID $LPS_SUMMARY"
       local PR_MESSAGE="$JIRA_URL/browse/$LPS_ID"
       gitDeleteRemoteBranch
-      gh pr -s "$username" $prOptions --title "$PR_TITLE" --description "$PR_MESSAGE"
+      gh pr create --repo "$username"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
     else
       echo "Skipping Pull Request update with Jira info"
       gitDeleteRemoteBranch
-      gh pr -s "$username"
+      gh pr create --repo "$username"/"$REPO"
     fi
     if [ "$updateJira" = "true" ]; then
       local OPENED_PR

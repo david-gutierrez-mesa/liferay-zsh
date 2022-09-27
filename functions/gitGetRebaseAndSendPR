@@ -65,7 +65,7 @@ function gitGetRebaseAndSendPR() {
          }
     fi
 
-    gh pr -u $FROM_USER $PR_NUMBER || {
+    gh pr checkout $PR_NUMBER --repo "$FROM_USER"/"$REPO" || {
       echo 'Impossible to get PR ' $PR_NUMBER ' from user ' $FROM_USER
       return
     }
@@ -90,7 +90,7 @@ function gitGetRebaseAndSendPR() {
     else
       PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
     fi
-    gh pr -s $TO_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
+    gh pr create --repo "$TO_USER"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
     local OPENED_PR
     OPENED_PR=$(gitGetLastPRnumber)
     gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
