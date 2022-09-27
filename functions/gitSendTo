@@ -48,11 +48,11 @@ gitSendTo() {
       local PR_TITLE="$LPS_ID $LPS_SUMMARY"
       local PR_MESSAGE="$JIRA_URL/browse/$LPS_ID"
       gitDeleteRemoteBranch
-      gh pr create --repo "$FROM_USER"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
+      gh pr create --repo "$username"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
     else
       echo "Skipping Pull Request update with Jira info"
       gitDeleteRemoteBranch
-      gh pr create --repo "$FROM_USER"/"$REPO"
+      gh pr create --repo "$username"/"$REPO"
     fi
     if [ "$updateJira" = "true" ]; then
       local OPENED_PR

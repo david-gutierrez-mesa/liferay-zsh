@@ -90,7 +90,7 @@ function gitGetRebaseAndSendPR() {
     else
       PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
     fi
-    gh pr create --repo "$FROM_USER"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
+    gh pr create --repo "$TO_USER"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
     local OPENED_PR
     OPENED_PR=$(gitGetLastPRnumber)
     gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
