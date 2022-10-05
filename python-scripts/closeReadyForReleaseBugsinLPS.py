@@ -8,6 +8,7 @@ if __name__ == "__main__":
     login = manageCredentialsCrypto.get_credentials()
     jira = JIRA("https://issues.liferay.com", basic_auth=login)
     bugs_in_ready_for_release = jira.search_issues('filter=54632')
+    allBugsClosed = True
     for bug in bugs_in_ready_for_release:
         bug_id = bug.id
         print("Closing ", bug.key)
@@ -16,8 +17,20 @@ if __name__ == "__main__":
             bug.update(
                 fields={'fixVersions': fixVersion}
             )
-        jira.transition_issue(bug_id, transition='Closed')
-        jira.add_comment(bug_id, 'Closing directly since we are not considering Ready for Release status so far',
-                         visibility={'type': 'group', 'value': 'liferay-qa'})
+        canBeClosed = True
+        for subtask in bug.fields.subtasks:
+            status = subtask.fields.status.name
+            if status != 'Closed':
+                canBeClosed = False
+                break
+        if canBeClosed:
+            jira.transition_issue(bug_id, transition='Closed')
+            jira.add_comment(bug_id, 'Closing directly since we are not considering Ready for Release status so far',
+                             visibility={'type': 'group', 'value': 'liferay-qa'})
+        else:
+            allBugsClosed = False
+
+    if not allBugsClosed:
+        raise TypeError("Not all bugs were closed since some of them has not closed subtask")
 
     print("Ready for Release status are closed")
