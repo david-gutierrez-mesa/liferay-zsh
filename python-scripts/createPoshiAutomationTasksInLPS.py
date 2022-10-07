@@ -53,11 +53,13 @@ if __name__ == "__main__":
             for row in tableRows[1:]:
                 if row.count('|') == 7:
                     cells = row.split('|')
-                    if cells[4].casefold() == 'TBD'.casefold() or cells[5].casefold() == 'TBD'.casefold():
+                    if cells[2].casefold() == 'TBD'.casefold() \
+                            or cells[4].casefold() == 'TBD'.casefold() \
+                            or cells[5].casefold() == 'TBD'.casefold():
                         outputMessage += "Table for story " + story.key + " is not uptodate. Skipping.\n"
                         skipStory = True
                         break
-                    if (cells[4].casefold() == 'No'.casefold() and cells[5].casefold() == 'No'.casefold()) \
+                    elif (cells[4].casefold() == 'No'.casefold() and cells[5].casefold() == 'No'.casefold()) \
                             and cells[6].casefold() == 'Yes'.casefold():
                         isAutomationTaskNeeded = True
                     poshiAutomationTable += row + ' | |' + '\r\n'
