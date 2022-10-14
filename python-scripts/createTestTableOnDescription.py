@@ -27,7 +27,7 @@ if __name__ == "__main__":
             summary = subtask.fields.summary
             if summary == 'Test Scenarios Coverage | Test Creation':
                 test_definitions = jira.issue(subtask.id, fields='description').fields.description.split('\r\n*Case')
-                for case in test_definitions[2:]:
+                for case in test_definitions[1:]:
                     case_summary = get_property(case, ':*\r\n')
                     case_priority = get_property(case, 'Test Strategy:')
                     can_be_automated = get_property(case, 'Can be covered by POSHI?:')
