@@ -56,6 +56,7 @@ gitSendTo() {
       local PR_TITLE="$LPS_ID $LPS_SUMMARY"
       local PR_MESSAGE="$JIRA_URL/browse/$LPS_ID"
       gitDeleteRemoteBranch
+      gitPush
       NEW_PR_URL=$(gh pr create --repo "$username"/"$CURRENT_REPO" --title "$PR_TITLE" --body "$PR_MESSAGE" | tail -1)
     else
       echo "Skipping Pull Request update with Jira info"
