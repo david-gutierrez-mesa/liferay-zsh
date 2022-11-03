@@ -40,11 +40,13 @@ function gitCloseRebasedPR() {
     else
       FROM_USER=$username
     fi
-    gh pr close "$PR_TO_CLOSE" --repo "$FROM_USER"/"$REPO" || {
+    local CURRENT_REPO
+    CURRENT_REPO=$(gitGetCurrentRepo)
+    gh pr close "$PR_TO_CLOSE" --repo "$FROM_USER"/"$CURRENT_REPO" || {
       echo "Impossible close PR $PR_REBASED"
       return
     }
-    gh pr comment "$PR_TO_CLOSE" --repo "$FROM_USER"/"$REPO" --body "Rebased. See $PR_REBASED"
+    gh pr comment "$PR_TO_CLOSE" --repo "$FROM_USER"/"$CURRENT_REPO" --body "Rebased. See $PR_REBASED"
   fi
 }
 

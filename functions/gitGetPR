@@ -28,13 +28,15 @@ function gitGetPR() {
       echo " "
       _showHelp "$0"
     else
-          local FROM_USER
-          if [ -z "$usernameFrom" ]; then
-            FROM_USER=$GITHUB_USER
-          else
-            FROM_USER=$usernameFrom
-          fi
-        gh pr checkout "$pullRequest" --repo "$FROM_USER"/"$REPO"
+        local FROM_USER
+        if [ -z "$usernameFrom" ]; then
+          FROM_USER=$GITHUB_USER
+        else
+          FROM_USER=$usernameFrom
+        fi
+        local CURRENT_REPO
+        CURRENT_REPO=$(gitGetCurrentRepo)
+        gh pr checkout "$pullRequest" --repo "$FROM_USER"/"$CURRENT_REPO"
     fi
 }
 

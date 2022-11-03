@@ -22,8 +22,10 @@ function gitDeleteRemoteBranch() {
       echo "You can not delete master branch"
       return
   fi
-  echo "Removing remote branch named $branch from repo liferay-portal of user $GITHUB_USER"
-  git ls-remote --heads --exit-code git@github.com:"$GITHUB_USER"/liferay-portal.git "$branch"
+  local CURRENT_REPO
+  CURRENT_REPO=$(gitGetCurrentRepo)
+  echo "Removing remote branch named $branch from repo $CURRENT_REPO of user $GITHUB_USER"
+  git ls-remote --heads --exit-code git@github.com:"$GITHUB_USER"/"$CURRENT_REPO".git "$branch"
   if [ $? -eq 0 ]; then
     git push origin --delete "$branch"
   else
