@@ -46,22 +46,24 @@ gitSendTo() {
     if isThisALiferayRepo; then
       LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
     else
-      updateJira="true"
+      updateJira="false"
       updatePullRequest="false"
     fi
+    local NEW_PR_URL
     if [ "$updatePullRequest" = "true" ]; then
       local LPS_SUMMARY
       LPS_SUMMARY=$(jiraGetIssueSummary -ji "$LPS_ID")
       local PR_TITLE="$LPS_ID $LPS_SUMMARY"
       local PR_MESSAGE="$JIRA_URL/browse/$LPS_ID"
       gitDeleteRemoteBranch
-      gh pr create --repo "$username"/"$CURRENT_REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
+      NEW_PR_URL=$(gh pr create --repo "$username"/"$CURRENT_REPO" --title "$PR_TITLE" --body "$PR_MESSAGE" | tail -1)
     else
       echo "Skipping Pull Request update with Jira info"
       gitDeleteRemoteBranch
       gitPush
-      gh pr create --repo "$username"/"$CURRENT_REPO" --fill
+      NEW_PR_URL=$(gh pr create --repo "$username"/"$CURRENT_REPO" --fill | tail -1)
     fi
+    open "$NEW_PR_URL"
     if [ "$updateJira" = "true" ]; then
       local OPENED_PR
       OPENED_PR=$(gitGetLastPRnumber -u "$username" | sed 's/^.\{1\}//')
