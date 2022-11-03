@@ -65,8 +65,10 @@ function gitGetFailingPRAndSendToBrian() {
     else
       PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
     fi
-    gh pr create --repo "brianchandotcom/$REPO" --title "$PR_TITLE" --description "$PR_MESSAGE"
+    gitPush
+    NEW_PR_URL=$(gh pr create --repo "brianchandotcom/$REPO" --title "$PR_TITLE" --description "$PR_MESSAGE" | tail -1)
     unset PR_NUMBER_TO_BCHAN
+    open "$NEW_PR_URL"
 }
 
 _showHelp() {
