@@ -37,7 +37,9 @@ function gitGetPRMessage() {
       FROM_USER=$username
     fi
     local PR_MESSAGE
-    PR_MESSAGE=$(gh pr view $pullRequest --repo $FROM_USER/"$REPO" --json body --template '{{.body}}' | awk '{print }')
+    local CURRENT_REPO
+    CURRENT_REPO=$(gitGetCurrentRepo)
+    PR_MESSAGE=$(gh pr view "$pullRequest" --repo "$FROM_USER"/"$CURRENT_REPO" --json body --template '{{.body}}' | awk '{print }')
     echo "$PR_MESSAGE"
   fi
 }

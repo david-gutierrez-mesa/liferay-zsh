@@ -43,7 +43,13 @@ function gitGetRebaseAndSendPR() {
     echo " "
     _showHelp "$0"
   else
+    if [ "$(isThisALiferayRepo)" = 1 ]; then
+      skipPoshiValidation="true"
+      skipUpdateGitLiferay="true"
+    fi
     PR_NUMBER=$pullRequest
+    local CURRENT_REPO
+    CURRENT_REPO=$(gitGetCurrentRepo)
     local FROM_USER
     local TO_USER
     if [ -z "$usernameFrom" ]; then
@@ -64,9 +70,8 @@ function gitGetRebaseAndSendPR() {
         return
          }
     fi
-
-    gh pr checkout $PR_NUMBER --repo "$FROM_USER"/"$REPO" || {
-      echo 'Impossible to get PR ' $PR_NUMBER ' from user ' $FROM_USER
+    gh pr checkout "$PR_NUMBER" --repo "$FROM_USER"/"$CURRENT_REPO" || {
+      echo 'Impossible to get PR ' "$PR_NUMBER" ' from user ' "$FROM_USER"
       return
     }
     echo "Rebasing"
@@ -83,18 +88,18 @@ function gitGetRebaseAndSendPR() {
     fi
     echo "Sending to $TO_USER"
     local PR_TITLE
-    PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
+    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER" -u "$FROM_USER")
     local PR_MESSAGE=""
     if [ "$FROM_USER" = "$TO_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER" -u "$FROM_USER")
     else
-      PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER" -u "$FROM_USER")
     fi
-    gh pr create --repo "$TO_USER"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
+    gh pr create --repo "$TO_USER"/"$CURRENT_REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
     local OPENED_PR
     OPENED_PR=$(gitGetLastPRnumber)
-    gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
-    git checkout pr-$PR_NUMBER
+    gitCloseRebasedPR -prtc "$PR_NUMBER" -prrb "$OPENED_PR" -u "$FROM_USER"
+    git checkout pr-"$PR_NUMBER"
     unset PR_NUMBER
   fi
 }

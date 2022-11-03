@@ -38,7 +38,9 @@ function gitGetPRTitle() {
       FROM_USER=$username
     fi
     local PR_TITLE
-    PR_TITLE=$(gh pr view $pullRequest --repo $FROM_USER/"$REPO" --json title --template '{{.title}}' | head -n 1 | awk  '{print $1}')
+    local CURRENT_REPO
+    CURRENT_REPO=$(gitGetCurrentRepo)
+    PR_TITLE=$(gh pr view "$pullRequest" --repo "$FROM_USER"/"$CURRENT_REPO" --json title --template '{{.title}}' | head -n 1 | awk  '{print $1}')
     echo "$PR_TITLE"
   fi
 }

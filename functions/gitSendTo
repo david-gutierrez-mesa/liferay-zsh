@@ -41,18 +41,25 @@ gitSendTo() {
       echo "Skipping Poshi Validation and SF"
     fi
     local LPS_ID
-    LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
+    local CURRENT_REPO
+    CURRENT_REPO=$(gitGetCurrentRepo)
+    if isThisALiferayRepo; then
+      LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
+    else
+      updateJira="true"
+      updatePullRequest="false"
+    fi
     if [ "$updatePullRequest" = "true" ]; then
       local LPS_SUMMARY
       LPS_SUMMARY=$(jiraGetIssueSummary -ji "$LPS_ID")
       local PR_TITLE="$LPS_ID $LPS_SUMMARY"
       local PR_MESSAGE="$JIRA_URL/browse/$LPS_ID"
       gitDeleteRemoteBranch
-      gh pr create --repo "$username"/"$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
+      gh pr create --repo "$username"/"$CURRENT_REPO" --title "$PR_TITLE" --body "$PR_MESSAGE"
     else
       echo "Skipping Pull Request update with Jira info"
       gitDeleteRemoteBranch
-      gh pr create --repo "$username"/"$REPO"
+      gh pr create --repo "$username"/"$CURRENT_REPO"
     fi
     if [ "$updateJira" = "true" ]; then
       local OPENED_PR

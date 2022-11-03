@@ -18,7 +18,11 @@ function gitGetLastPRnumber() {
     esac
     shift
   done
-  echo $(gh pr list --repo "$FROM_USER"/"$REPO" | head -n 1 | awk  '{print $1}')
+  local CURRENT_REPO
+  CURRENT_REPO=$(gitGetCurrentRepo)
+  local PR_NUMBER
+  PR_NUMBER=$(gh pr list --repo "$FROM_USER"/"$CURRENT_REPO" | head -n 1 | awk  '{print $1}')
+  echo "$PR_NUMBER"
 }
 
 _showHelp() {
