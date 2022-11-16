@@ -1,7 +1,8 @@
 function gitGetFailingPRAndSendToBrian() {
 
+  local FROM_USER=$GITHUB_USER
   local PR_NUMBER_TO_BCHAN
-  local FROM_USER
+  local runSF="true"
 
   while [ "$1" != "" ]; do
     case $1 in
@@ -17,6 +18,9 @@ function gitGetFailingPRAndSendToBrian() {
       shift
       FROM_USER="$1"
       ;;
+    -ssf | -skipSF)
+      runSF="false"
+      ;;
     *)
       echo "Invalid option"
       _showHelp "$0"
@@ -26,49 +30,55 @@ function gitGetFailingPRAndSendToBrian() {
     shift
   done
 
-  if [ -z "$PR_NUMBER_TO_BCHAN" ]; then
-    echo "Enter a PR number"
-    echo " "
-    _showHelp "$0"
-    return 0
-  fi
-    if [ -z "$FROM_USER" ]; then
-      FROM_USER=$GITHUB_USER
+  if isThisALiferayRepo; then
+    if [ -z "$PR_NUMBER_TO_BCHAN" ]; then
+      echo "Enter a PR number"
+      echo " "
+      _showHelp "$0"
+      return 0
     fi
+      echo 'Getting PR' "$PR_NUMBER_TO_BCHAN" 'from user' "$FROM_USER"
 
-    # shellcheck disable=SC2086
-    echo 'Getting PR' $PR_NUMBER_TO_BCHAN 'from user' $FROM_USER
+      gitMaster
 
-    gitMaster
-    gitFetchBrians
-    gh pr checkout "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$REPO" || {
-      echo 'Impossible to get PR ' "$PR_NUMBER_TO_BCHAN" ' from user ' $FROM_USER
-      return
-    }
-    echo "Rebasing"
-    gitRebaseBrian || {
-      echo 'Rebase failed. Fix rebase and continue manually with gitRebaseBriansContinueAndSendPR'
-      return
-    }
-    echo "Running Poshi validations"
-    poshiSFCommit || {
-      echo 'Impossible to commit. Source Formatted failed'
-      return
-    }
-    echo "Sending to Brian"
-    local PR_TITLE
-    local PR_MESSAGE
-    local PR_MESSAGE
-    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
-    if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
+      gh pr checkout "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$REPO" || {
+        echo 'Impossible to get PR ' "$PR_NUMBER_TO_BCHAN" ' from user ' "$FROM_USER"
+        return
+      }
+      gitFetchBrians
+      echo "Rebasing"
+      gitRebaseBrian || {
+        echo 'Rebase failed. Fix rebase and continue manually with gitRebaseBriansContinueAndSendPR'
+        return
+      }
+      if [ "$runSF" = "true" ]; then
+        poshiSFCommit || {
+          echo 'Impossible to commit. Source Formatted failed'
+          return
+        }
+      else
+        echo "Skipping Poshi Validation and SF"
+      fi
+      echo "Sending to Brian"
+      local PR_TITLE
+      local PR_MESSAGE
+      PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
+      if [ "$FROM_USER" = "$GITHUB_USER" ]; then
+        PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
+      else
+        PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
+      fi
+      if [ "$runSF" = "true" ]; then
+        gitPush
+      else
+        gitPush -ssf
+      fi
+      NEW_PR_URL=$(gh pr create --repo "brianchandotcom/$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE" | tail -1)
+      unset PR_NUMBER_TO_BCHAN
+      open "$NEW_PR_URL"
     else
-      PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
+       echo "This is not a liferay-portal. Can not send to Brian"
     fi
-    gitPush
-    NEW_PR_URL=$(gh pr create --repo "brianchandotcom/$REPO" --title "$PR_TITLE" --description "$PR_MESSAGE" | tail -1)
-    unset PR_NUMBER_TO_BCHAN
-    open "$NEW_PR_URL"
 }
 
 _showHelp() {
@@ -78,6 +88,7 @@ _showHelp() {
   echo "options:"
   echo "-h | -help,     Show brief help"
   echo "-pr,            Pull request number to get. Mandatory"
+  echo "-ssf | -skipSF, Skip Poshi validation and Source Formatter"
   echo "-u,             Git user to get the PR from. If not set $GITHUB_USER is used"
 }
 
