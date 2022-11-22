@@ -2,7 +2,7 @@ function gitGetFailingPRAndSendToBrian() {
 
   local FROM_USER=$GITHUB_USER
   local PR_NUMBER_TO_BCHAN
-  local runSF="true"
+  local runSF="false"
 
   while [ "$1" != "" ]; do
     case $1 in
@@ -18,8 +18,8 @@ function gitGetFailingPRAndSendToBrian() {
       shift
       FROM_USER="$1"
       ;;
-    -ssf | -skipSF)
-      runSF="false"
+    -sf | -SF)
+      runSF="true"
       ;;
     *)
       echo "Invalid option"
@@ -88,7 +88,7 @@ _showHelp() {
   echo "options:"
   echo "-h | -help,     Show brief help"
   echo "-pr,            Pull request number to get. Mandatory"
-  echo "-ssf | -skipSF, Skip Poshi validation and Source Formatter"
+  echo "-sf | -SF,      To run validation and Source Formatter"
   echo "-u,             Git user to get the PR from. If not set $GITHUB_USER is used"
 }
 
