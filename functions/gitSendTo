@@ -35,7 +35,7 @@ gitSendTo() {
     if [ "$runSF" = "true" ]; then
       poshiSFCommit || {
         echo 'Impossible to commit. Source Formatted failed'
-        return
+        return 1
       }
     else
       echo "Skipping Poshi Validation and SF"
