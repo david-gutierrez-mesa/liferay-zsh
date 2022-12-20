@@ -18,7 +18,7 @@ function poshiSFCommit() {
     if [ -z "$(git status --porcelain)" ]; then
       poshiSF || {
         echo 'Source Formatted failed. Check logs and fix'
-        exit 1
+        return 1
       }
       if [ -z "$(git status --porcelain)" ]; then
         echo "There are not Source Formatted changes to commit"

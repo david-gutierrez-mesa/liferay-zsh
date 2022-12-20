@@ -62,7 +62,7 @@ function gitRebaseContinueAndSendPR() {
   else
     gitRebaseContinue || {
       echo 'Rebase failed. Fix rebase and continue manually with gitRebaseContinueAndSendPR'
-      exit 1
+      return 1
     }
     echo "Running Poshi validations"
     poshiSFCommit || {
