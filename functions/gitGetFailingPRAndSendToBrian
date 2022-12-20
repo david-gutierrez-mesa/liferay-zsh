@@ -43,18 +43,18 @@ function gitGetFailingPRAndSendToBrian() {
 
       gh pr checkout "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$REPO" || {
         echo 'Impossible to get PR ' "$PR_NUMBER_TO_BCHAN" ' from user ' "$FROM_USER"
-        return
+        return 1
       }
       gitFetchBrians
       echo "Rebasing"
       gitRebaseBrian || {
         echo 'Rebase failed. Fix rebase and continue manually with gitRebaseBriansContinueAndSendPR'
-        return
+        return 1
       }
       if [ "$runSF" = "true" ]; then
         poshiSFCommit || {
           echo 'Impossible to commit. Source Formatted failed'
-          return
+          return 1
         }
       else
         echo "Skipping Poshi Validation and SF"

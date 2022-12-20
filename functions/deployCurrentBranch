@@ -49,7 +49,7 @@ _getModulePath() {
  		fi
  		if [ "$DIR" = "/" ]; then
  			echo "error: no build.gradle found in $PWD or any of its ancestors"
- 			exit 1
+ 			return 1
  		fi
  		START=$(dirname "$START")
  	done

@@ -62,12 +62,12 @@ function gitRebaseContinueAndSendPR() {
   else
     gitRebaseContinue || {
       echo 'Rebase failed. Fix rebase and continue manually with gitRebaseContinueAndSendPR'
-      exit 1
+      return 1
     }
     echo "Running Poshi validations"
     poshiSFCommit || {
       echo 'Impossible to commit. Source Formatted failed'
-      return
+      return 1
     }
     echo "Sending to me"
     local PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)

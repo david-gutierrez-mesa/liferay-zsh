@@ -20,7 +20,7 @@ function gitDeleteRemoteBranch() {
   fi
   if [ "$branch" = "master" ]; then
       echo "You can not delete master branch"
-      return
+      return 1
   fi
   local CURRENT_REPO
   CURRENT_REPO=$(gitGetCurrentRepo)

@@ -67,23 +67,23 @@ function gitGetRebaseAndSendPR() {
       echo 'Updating git before rebase'
       updateGitLiferay || {
         echo 'Updating git failed. Please fix issue and retry'
-        return
+        return 1
          }
     fi
     gh pr checkout "$PR_NUMBER" --repo "$FROM_USER"/"$CURRENT_REPO" || {
       echo 'Impossible to get PR ' "$PR_NUMBER" ' from user ' "$FROM_USER"
-      return
+      return 1
     }
     echo "Rebasing"
     gitRebase || {
       echo 'Rebase failed. Fix rebase and continue manually with gitRebaseContinueAndSendPR'
-      return
+      return 1
     }
     echo "Running Poshi validations"
     if [ "$skipPoshiValidation" = "false" ]; then
       poshiSFCommit || {
         echo 'Impossible to commit. Source Formatted failed'
-        return
+        return 1
       }
     fi
     echo "Sending to $TO_USER"
