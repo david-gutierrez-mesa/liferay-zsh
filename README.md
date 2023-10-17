@@ -4,6 +4,9 @@ Oh my zsh plugin with scripts for Liferay development
 
 ## Preconditions
 
+### Git
+https://github.com/git-guides/install-git
+
 ### Java 1.8
 Download and install https://www.java.com/es/download/
 **Note:** liferay-zsh.plugin.zsh is forcing change to java 1.8
@@ -15,6 +18,7 @@ https://github.com/ohmyzsh/ohmyzsh
 https://cli.github.com/
 
 ### GNU-sed
+***Not needed in Linux***
 ```bash
 brew install gnu-sed
 ```
