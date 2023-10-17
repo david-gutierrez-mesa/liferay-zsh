@@ -149,7 +149,7 @@ These are the steps we should follow:
 2. Then create a directory called 'plugins' inside your custom directory. 
 3. Enter into the plugins directory and do
 ```bash
-git clone git@github.com:david-gutierrez-mesa/liferay-zsh.git
+gh repo clone david-gutierrez-mesa/liferay-zsh
 ```
 
 Your file tree should look like this:
@@ -183,7 +183,7 @@ Steps to follow:
 **Note:** To generate a git hub token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 
 ### Install Python dependencies
-From Liferay ZSH root directory type:
+From Liferay ZSH root directory ($ZSH_CUSTOM/plugins/liferay-zsh/) type:
 ```bash
 pip install -r python-scripts/requirements.txt
 ```
