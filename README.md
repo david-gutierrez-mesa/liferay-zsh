@@ -18,10 +18,35 @@ https://github.com/ohmyzsh/ohmyzsh
 https://cli.github.com/
 
 ### GNU-sed
-***Not needed in Linux***
+<details>
+<summary>In Mac</summary>
+  
 ```bash
 brew install gnu-sed
 ```
+</details>
+<details>
+<summary>In Linux</summary>
+Not needed in Linux
+</details>
+
+### Node
+<details>
+<summary>In Mac</summary>
+https://nodejs.org/en/download/package-manager#macos
+  
+```bash
+brew install node
+```
+</details>
+<details>
+<summary>In Linux</summary>
+https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04
+  
+```bash
+sudo apt update && sudo apt install nodejs && sudo apt install npm
+```
+</details>
 
 ### Liferay projects
 Download in $PATH_TO_LIFERAY_MAIN
@@ -45,24 +70,42 @@ git remote add brianchandotcom https://github.com/brianchandotcom/liferay-portal
 
 ### Dependencies for python scripts
 #### Install python (if you don't have it)
+
+<details>
+<summary>In Mac</summary>
+  
 ```bash
 brew install python
 ```
+</details>
+<details>
+<summary>In Linux</summary>
+
+```bash
+sudo apt update && sudo apt install python3
+```
+</details>
 
 #### Install pip
+<details>
+<summary>In Mac</summary>
+  
 Homebrew installs pip pointing to the Homebrew’d Python 3 for you.
+</details>
+<details>
+<summary>In Linux</summary>
 
-#### Install dependencies
 ```bash
-pip install -r python-scripts/requirements.txt
+sudo apt install python3-pip
 ```
+</details>
 
 ### jira-cli
-This is necessary if you want to update jira from commands like [gitSendTo](https://github.com/david-gutierrez-mesa/liferay-zsh/blob/master/functions/gitSendTo)
+This is necessary if you want to update Jira from commands like [gitSendTo](https://github.com/david-gutierrez-mesa/liferay-zsh/blob/master/functions/gitSendTo)
 
 Install it with 
 ```bash
-npm install -g jira-cli 
+sudo npm install -g jira-cli 
 ```
 
 Configure it with
@@ -77,22 +120,34 @@ Install it from here https://dev.mysql.com/downloads/file/?id=503070
 
 Set same user and password you have in your .liferay-zsh.config file
 
-### Coreutils fro Mac
+### Coreutils
+<details>
+<summary>In Mac</summary>
+  
 ```bash
 brew install coreutils
 ```
+</details>
+<details>
+<summary>In Linux</summary>
+
+```bash
+sudo apt-get update -y && sudo apt-get install -y coreutils
+```
+</details>
+
 
 ## liferay-zsh installation
 
-In this section we describe how to install liferay-zsh plugin for oh-my-zsh
+In this section, we describe how to install liferay-zsh plugin for oh-my-zsh
 
 ### Create installation path and clone repo
-As any zsh plugin we need to create a specific structure to place our liferay-zsh plugin.
+As with any zsh plugin we need to create a specific structure to place our liferay-zsh plugin.
 
 These are the steps we should follow:
-1. Create a custom folder to place your ZSH customisations. You can create this directory wherever you want and call it as you prefer. For instance MyCustomFolder inside user home
-2. Then create a directory call 'plugins' inside your custom directory. 
-3. Enter plugins directory and do
+1. Create a custom folder to place your ZSH customizations. You can create this directory wherever you want and call it as you prefer. For instance MyCustomFolder inside user home
+2. Then create a directory called 'plugins' inside your custom directory. 
+3. Enter into the plugins directory and do
 ```bash
 git clone git@github.com:david-gutierrez-mesa/liferay-zsh.git
 ```
@@ -125,7 +180,13 @@ Steps to follow:
 1. Move $ZSH_CUSTOM/plugins/liferay-zsh/.liferay-zsh.conf file to /Users/{youruser}/ folder 
 2. Edit /Users/{youruser}/.liferay-zsh.conf and fill al the variables there.
 
-**Note:** to generate a git hub token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
+**Note:** To generate a git hub token see https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
+
+### Install Python dependencies
+From Liferay ZSH root directory type:
+```bash
+pip install -r python-scripts/requirements.txt
+```
 
 ### Reload zsh
 Now that all the configuration is done you just need to reload zsh
@@ -134,11 +195,11 @@ Now that all the configuration is done you just need to reload zsh
 Now you are ready to use liferay-zsh plugin
 
 ## How to use it
-Liferay ZSH plugin is a set of functions you can call from your Oh My ZSH terminal and that are helping you with your daily work inside liferay.
+The Liferay ZSH plugin is a set of functions you can call from your Oh My ZSH terminal that are helping you with your daily work inside Liferay.
 
 In order to see all the available functions check [functions](https://github.com/david-gutierrez-mesa/liferay-zsh/tree/master/functions) folder.
 
-To know how to use a function, use -h parameter. Example:
+To know how to use a function, use the -h parameter. Example:
 ```bash
 gitSendTo -h
 ```
