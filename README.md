@@ -11,6 +11,23 @@ https://github.com/git-guides/install-git
 Download and install https://www.java.com/es/download/
 **Note:** liferay-zsh.plugin.zsh is forcing change to java 1.8
 
+### Ant
+<details>
+<summary>In Mac</summary>
+  
+```bash
+bbrew install ant
+```
+</details>
+<details>
+<summary>In Linux</summary>
+https://snapcraft.io/install/ant/ubuntu
+  
+```bash
+sudo apt update && sudo apt install snapd && sudo snap install ant --classic
+```
+</details>
+
 ### Oh-My-ZSH
 https://github.com/ohmyzsh/ohmyzsh
 
