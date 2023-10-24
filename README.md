@@ -1,4 +1,4 @@
-# liferay-zsh
+# liferay-zsh test
 ## Description
 Oh my zsh plugin with scripts for Liferay development
 
