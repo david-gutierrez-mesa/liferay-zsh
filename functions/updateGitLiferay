@@ -36,12 +36,10 @@ function updateGitLiferay() {
 
   if [ "$use_DXP" = "false" ]; then
     echo "  Generating file test.$USER.properties in $PATH_TO_DXP_PORTAL "
-    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_DXP_PORTAL/test.$USER.properties" && \
-    sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_DXP_PORTAL/test.$USER.properties"
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_DXP_PORTAL/test.$USER.properties"
   else
     echo "  Generating file test.$USER.properties in $PATH_TO_PORTAL "
-    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties" && \
-    sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "$PATH_TO_PORTAL/test.$USER.properties"
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "$PATH_TO_PORTAL/test.$USER.properties"
   fi
 }
 
