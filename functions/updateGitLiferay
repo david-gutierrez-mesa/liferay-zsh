@@ -31,7 +31,7 @@ function updateGitLiferay() {
   gitCleanxdf || return 1
   git fetch upstream master || return 1
   git pull upstream master || return 1
-  git push origin head || return 1
+  git push origin HEAD || return 1
   ant setup-libs setup-sdk || return 1
 
   if [ "$use_DXP" = "false" ]; then
