@@ -17,7 +17,7 @@ export JIRA_URL="https://issues.liferay.com"
 
 # JAVA
 if [ -z "$JAVA_HOME" ]; then
-  case `uname` in
+  case $(uname) in
     Darwin)
       JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
       export JAVA_HOME
