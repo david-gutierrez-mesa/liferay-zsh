@@ -133,9 +133,35 @@ sudo jira config
 **More info at** https://www.npmjs.com/package/jira-cli
 
 ### MySQL
+<details>
+<summary>In Mac</summary>
+
 Install it from here https://dev.mysql.com/downloads/file/?id=503070
 
 Set same user and password you have in your .liferay-zsh.config file
+</details>
+<details>
+<summary>In Linux</summary>
+
+Install mySQL
+```bash
+sudo apt update && sudo apt upgrade && sudo apt install mysql-server
+```
+
+Configure mySQL
+```bash
+sudo mysql
+```
+Set same user and password you have in your .liferay-zsh.config file:
+```bash
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+```
+Exit mysql
+```bash
+exit
+```
+</details>
+
 
 ### Coreutils
 <details>
