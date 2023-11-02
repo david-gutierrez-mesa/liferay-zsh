@@ -7,8 +7,16 @@ export LIFERAY_ZSH_DEPLOYMENTS_PATH=$LIFERAY_ZSH_INSTALLATION_PATH/deployments
 #Load personal variables
 . $L_ZSH_CONFIG_FILE
 
-#ANT
-export ANT_OPTS="-Xmx2560m"
+#ANT and GRADLE
+case $(uname) in
+  Darwin)
+    export ANT_OPTS="-Xmx2560m"
+  ;;
+  Linux)
+    export ANT_OPTS="-Xms8192M -Xmx8192M"
+    export GRADLE_OPTS="-Xms8192M -Xmx8192M"
+  ;;
+esac
 
 # JIRA
 JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
@@ -78,17 +86,19 @@ function gitRebaseContinueAndSendPR() {
       return 1
     }
     echo "Sending to me"
-    local PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
+    local PR_TITLE
+    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER" -u "$FROM_USER")
     local PR_MESSAGE=""
     if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER" -u "$FROM_USER")
     else
-      PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER" -u "$FROM_USER")
     fi
-    gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
-    local OPENED_PR=$(gitGetLastPRnumber)
-    gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
-    git checkout pr-$PR_NUMBER
+    gh pr -s "$GITHUB_USER" --title "$PR_TITLE" --description "$PR_MESSAGE"
+    local OPENED_PR
+    OPENED_PR=$(gitGetLastPRnumber)
+    gitCloseRebasedPR -prtc "$PR_NUMBER" -prrb "$OPENED_PR" -u "$FROM_USER"
+    git checkout pr-"$PR_NUMBER"
     unset PR_NUMBER
 
   fi
@@ -109,9 +119,9 @@ function gitRebaseBriansContinueAndSendPR() {
     }
     echo "Sending to Brian"
     local PR_TITLE
-    PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER_TO_BCHAN)
+    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER_TO_BCHAN")
     local PR_MESSAGE
-    PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER_TO_BCHAN)
+    PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN")
     gh pr -s brianchandotcom --title "$PR_TITLE" --description "$PR_MESSAGE"
     unset PR_NUMBER_TO_BCHAN
   fi

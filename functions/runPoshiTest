@@ -40,16 +40,14 @@ function runPoshiTest() {
         cd $PATH_TO_PORTAL/ && \
         if [ ! -d "./test.$USER.properties" ]; then
             cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/test.USER.properties" "./test.$USER.properties"
-            if [ -z "$JAVA_HOME" ]; then
-              case $(uname) in
-                Darwin)
-                  sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
-                ;;
-                  Linux)
-                  sed -i "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
-                ;;
-              esac
-            fi
+            case $(uname) in
+              Darwin)
+                sed -i '' "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
+              ;;
+              Linux)
+                sed -i "s+%CHROMIUM_INSTALLATION_PATH%+$CHROMIUM_INSTALLATION_PATH+g" "./test.$USER.properties"
+              ;;
+            esac
         fi
         ant -f build-test.xml run-selenium-test -Dtest.class=$poshiTest && \
         _openPoshiResults $poshiTest && \
