@@ -86,17 +86,19 @@ function gitRebaseContinueAndSendPR() {
       return 1
     }
     echo "Sending to me"
-    local PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER -u $FROM_USER)
+    local PR_TITLE
+    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER" -u "$FROM_USER")
     local PR_MESSAGE=""
     if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-      PR_MESSAGE=$(gitGetPRMessage -pr $PR_NUMBER -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER" -u "$FROM_USER")
     else
-      PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER -u $FROM_USER)
+      PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER" -u "$FROM_USER")
     fi
-    gh pr -s $GITHUB_USER --title "$PR_TITLE" --description "$PR_MESSAGE"
-    local OPENED_PR=$(gitGetLastPRnumber)
-    gitCloseRebasedPR -prtc $PR_NUMBER -prrb $OPENED_PR -u $FROM_USER
-    git checkout pr-$PR_NUMBER
+    gh pr -s "$GITHUB_USER" --title "$PR_TITLE" --description "$PR_MESSAGE"
+    local OPENED_PR
+    OPENED_PR=$(gitGetLastPRnumber)
+    gitCloseRebasedPR -prtc "$PR_NUMBER" -prrb "$OPENED_PR" -u "$FROM_USER"
+    git checkout pr-"$PR_NUMBER"
     unset PR_NUMBER
 
   fi
@@ -117,9 +119,9 @@ function gitRebaseBriansContinueAndSendPR() {
     }
     echo "Sending to Brian"
     local PR_TITLE
-    PR_TITLE=$(gitGetPRTitle -pr $PR_NUMBER_TO_BCHAN)
+    PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER_TO_BCHAN")
     local PR_MESSAGE
-    PR_MESSAGE=$(gitGetPRMessageWitSender -pr $PR_NUMBER_TO_BCHAN)
+    PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN")
     gh pr -s brianchandotcom --title "$PR_TITLE" --description "$PR_MESSAGE"
     unset PR_NUMBER_TO_BCHAN
   fi
