@@ -7,8 +7,16 @@ export LIFERAY_ZSH_DEPLOYMENTS_PATH=$LIFERAY_ZSH_INSTALLATION_PATH/deployments
 #Load personal variables
 . $L_ZSH_CONFIG_FILE
 
-#ANT
-export ANT_OPTS="-Xmx2560m"
+#ANT and GRADLE
+case $(uname) in
+  Darwin)
+    export ANT_OPTS="-Xmx2560m"
+  ;;
+  Linux)
+    export ANT_OPTS="-Xms8192M -Xmx8192M"
+    export GRADLE_OPTS="-Xms8192M -Xmx8192M"
+  ;;
+esac
 
 # JIRA
 JIRA_CONFIG="$USER_HOME/.jira-cli/config.json"
