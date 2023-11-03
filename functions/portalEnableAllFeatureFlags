@@ -14,6 +14,7 @@ function portalEnableAllFeatureFlags() {
     shift
   done
   echo "Enabling all feature flags..."
+  CURRENT_DIRECTORY=$(pwd)
   cd "$LIFERAY_ZSH_INSTALLATION_PATH/python-scripts/" || exit
   rm -rf env
   python3 -m venv env
@@ -21,6 +22,8 @@ function portalEnableAllFeatureFlags() {
   python3 -m pip install -r requirements.txt
   "./addFeaturesFlagsToPropertiesFile.py" "$PATH_TO_BUNDLES/portal-ext.properties" all
   deactivate
+  cd "$CURRENT_DIRECTORY" || exit
+  unset CURRENT_DIRECTORY
 }
 
 _showHelp() {
