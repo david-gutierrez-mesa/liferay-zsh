@@ -103,8 +103,7 @@ function mountBundle() {
   esac
 
   if [ "$enableFeatureFlags" = "true" ]; then
-    echo "Enabling all feature flags..."
-    "$LIFERAY_ZSH_INSTALLATION_PATH/python-scripts/addFeaturesFlagsToPropertiesFile.py" "$PATH_TO_BUNDLES/portal-ext.properties" all
+    portalEnableAllFeatureFlags
   fi
 
   gitClean || return 1

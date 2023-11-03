@@ -1,6 +1,7 @@
 /.idea/
 /deployments/
 /venv/
-python-scripts/__pycache__/
+/python-scripts/__pycache__/
 .DS_Store
 .gradle
+/python-scripts/env/

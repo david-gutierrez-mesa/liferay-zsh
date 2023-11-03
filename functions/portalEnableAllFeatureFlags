@@ -1,0 +1,39 @@
+function portalEnableAllFeatureFlags() {
+    while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+  echo "Enabling all feature flags..."
+  CURRENT_DIRECTORY=$(pwd)
+  cd "$LIFERAY_ZSH_INSTALLATION_PATH/python-scripts/" || exit
+  rm -rf env
+  python3 -m venv env
+  source ./env/bin/activate
+  python3 -m pip install -r requirements.txt
+  "./addFeaturesFlagsToPropertiesFile.py" "$PATH_TO_BUNDLES/portal-ext.properties" all
+  deactivate
+  cd "$CURRENT_DIRECTORY" || exit
+  unset CURRENT_DIRECTORY
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function updates $PATH_TO_BUNDLES/portal-ext.properties file to include all the feature flags defined in portal-impl/src/portal.properties file. If portal is running, a restart is needed."
+  echo " "
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,       Show brief help"
+}
+
+portalEnableAllFeatureFlags "$@"
