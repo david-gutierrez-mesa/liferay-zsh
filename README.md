@@ -16,7 +16,7 @@ Download and install https://www.java.com/es/download/
 <summary>In Mac</summary>
   
 ```bash
-bbrew install ant
+brew install ant
 ```
 </details>
 <details>
