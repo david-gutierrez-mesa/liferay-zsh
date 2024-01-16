@@ -1,0 +1,30 @@
+function gitMasterAndPull() {
+    while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+  gitMaster &&
+  gitPull
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "This function runs:"
+  echo "  gitMaster and, if it succeed, run gitPull"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,       Show brief help"
+}
+
+gitMasterAndPull "$@"
