@@ -1,0 +1,85 @@
+function deployReleaseBundle() {
+  local useHSQL="false"
+  local startLiferay="true"
+  while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    -hsql)
+      useHSQL="true"
+      ;;
+    -ss | skipStartLiferay)
+      startLiferay="false"
+      ;;
+    *)
+      echo "Invalid option '$1'"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+
+  #check if we are in a release folder
+  
+  CURRENT_DIRECTORY=$(pwd)
+
+  if [ -d "$CURRENT_DIRECTORY/tomcat/bin/" ]; then
+      echo './tomcat/bin exists.'
+  else
+      echo './tomcat/bin directory does not exist. Are you sure we are in the right path?'
+      return 0
+  fi
+
+  if ps -eo command | grep "$CURRENT_DIRECTORY" | grep -v grep > /dev/null
+  then
+    echo "Liferay Running. Let's stop it first.."
+    # change to save current directory and stop the running instance
+    stopLiferay
+  fi
+
+  mysqlRecreateDataBase
+
+  if [ "$useHSQL" = "false" ]; then
+    cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-ext.properties"  "$CURRENT_DIRECTORY/portal-ext.properties"
+    case $(uname) in
+      Darwin)
+        sed -i '' "s/%JDBC_USER%/$MYSQL_USER/g" "$CURRENT_DIRECTORY/portal-ext.properties" && \
+        sed -i '' "s/%JDBC_PASSWORD%/$MYSQL_PASSWORD/g" "$CURRENT_DIRECTORY/portal-ext.properties"
+      ;;
+      Linux)
+        sed -i "s/%JDBC_USER%/$MYSQL_USER/g" "$CURRENT_DIRECTORY/portal-ext.properties" && \
+        sed -i "s/%JDBC_PASSWORD%/$MYSQL_PASSWORD/g" "$CURRENT_DIRECTORY/portal-ext.properties"
+      ;;
+    esac
+  fi
+
+  cp "$LIFERAY_ZSH_INSTALLATION_PATH/util-files/portal-setup-wizard.properties" "$CURRENT_DIRECTORY/portal-setup-wizard.properties"
+  case $(uname) in
+    Darwin)
+      sed -i '' "s+%PATH_BUNDLES%+$CURRENT_DIRECTORY+g" "$CURRENT_DIRECTORY/portal-setup-wizard.properties"
+    ;;
+    Linux)
+      sed -i "s+%PATH_BUNDLES%+$CURRENT_DIRECTORY+g" "$CURRENT_DIRECTORY/portal-setup-wizard.properties"
+    ;;
+  esac
+
+  if [ "$startLiferay" = "true" ]; then
+    cd "$CURRENT_DIRECTORY/tomcat/bin/" &&
+    ./catalina.sh jpda run
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,             Show brief help"
+  echo "-hsql,                  Use hsql data base instead of MySQL"
+  echo "-ss | skipStartLiferay, Skip start Liferay after mount the bundle"
+}
+
+deployReleaseBundle "$@"
