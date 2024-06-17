@@ -8,7 +8,7 @@ function sf() {
       _showHelp "$0"
       return 0
       ;;
-    -pr)
+    -lc)
       local_changes="true"
       ;;
     *)
@@ -39,6 +39,7 @@ _showHelp() {
   echo " "
   echo "options:"
   echo "-h | -help,           Show brief help"
+  echo "-lc,                  Run format-source-local-changes"
 }
 
 sf "$@"
