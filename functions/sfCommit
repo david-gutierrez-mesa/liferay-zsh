@@ -1,0 +1,50 @@
+function sfCommit() {
+    while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+
+  if isThisALiferayRepo; then
+    if [ -z "$(git status --porcelain)" ]; then
+      sf || {
+        echo 'Source Formatted failed. Check logs and fix'
+        return 1
+      }
+      if [ -z "$(git status --porcelain)" ]; then
+        echo "There are not Source Formatted changes to commit"
+      else
+        local LPS_ID
+        LPS_ID=$(git log -1 --pretty=%B | cut -d " " -f 1)
+        local message
+        message="$LPS_ID SF"
+        git add .
+        git commit -m "$message"
+        echo "Source formatted committed as $message"
+      fi
+    else
+      echo "You have uncommitted changes. Commit before do Source Formatter"
+    fi
+  else
+     echo "This is not a liferay-portal. Skipping Source Formatter"
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,           Show brief help"
+}
+
+sfCommit "$@"
