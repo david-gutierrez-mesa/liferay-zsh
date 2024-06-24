@@ -23,7 +23,6 @@ function deployReleaseBundle() {
   done
 
   #check if we are in a release folder
-  
   CURRENT_DIRECTORY=$(pwd)
 
   if [ -d "$CURRENT_DIRECTORY/tomcat/bin/" ]; then
