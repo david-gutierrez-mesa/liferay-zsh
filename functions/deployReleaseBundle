@@ -23,7 +23,6 @@ function deployReleaseBundle() {
   done
 
   #check if we are in a release folder
-  
   CURRENT_DIRECTORY=$(pwd)
 
   if [ -d "$CURRENT_DIRECTORY/tomcat/bin/" ]; then
@@ -65,6 +64,8 @@ function deployReleaseBundle() {
       sed -i "s+%PATH_BUNDLES%+$CURRENT_DIRECTORY+g" "$CURRENT_DIRECTORY/portal-setup-wizard.properties"
     ;;
   esac
+
+  cp "$LIFERAY_ACTIVATION_KEY_FILE" "$CURRENT_DIRECTORY/deploy/"
 
   if [ "$startLiferay" = "true" ]; then
     cd "$CURRENT_DIRECTORY/tomcat/bin/" &&
