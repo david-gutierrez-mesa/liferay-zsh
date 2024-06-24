@@ -65,6 +65,8 @@ function deployReleaseBundle() {
     ;;
   esac
 
+  cp "$LIFERAY_ACTIVATION_KEY_FILE" "$CURRENT_DIRECTORY/deploy/"
+
   if [ "$startLiferay" = "true" ]; then
     cd "$CURRENT_DIRECTORY/tomcat/bin/" &&
     ./catalina.sh jpda run
