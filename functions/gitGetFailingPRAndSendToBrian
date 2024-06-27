@@ -1,8 +1,13 @@
 function gitGetFailingPRAndSendToBrian() {
 
+  local CURRENT_REPO=$(gitGetCurrentRepo)
   local FROM_USER=$GITHUB_USER
   local PR_NUMBER_TO_BCHAN
   local runSF="false"
+
+  if [ "$CURRENT_REPO" = "$REPO_DXP" ]; then
+    FROM_USER=$LIFERAY_GITHUB_USER
+  fi
 
   while [ "$1" != "" ]; do
     case $1 in
@@ -37,17 +42,20 @@ function gitGetFailingPRAndSendToBrian() {
       _showHelp "$0"
       return 0
     fi
-      echo 'Getting PR' "$PR_NUMBER_TO_BCHAN" 'from user' "$FROM_USER"
+      PR_BRANCH=$(gitGetPRDestinationBranch -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
 
       gitMaster
+      git checkout "${PR_BRANCH}"
+      git pull
 
-      gh pr checkout "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$REPO" || {
+      echo 'Getting PR' "$PR_NUMBER_TO_BCHAN" 'from user' "$FROM_USER"
+      gh pr checkout "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" || {
         echo 'Impossible to get PR ' "$PR_NUMBER_TO_BCHAN" ' from user ' "$FROM_USER"
         return 1
       }
-      gitFetchBrians
+      gitFetchBrians -br "$PR_BRANCH"
       echo "Rebasing"
-      gitRebaseBrian || {
+      gitRebaseBrian -br "$PR_BRANCH" || {
         echo 'Rebase failed. Fix rebase and continue manually with gitRebaseBriansContinueAndSendPR'
         return 1
       }
@@ -73,7 +81,13 @@ function gitGetFailingPRAndSendToBrian() {
       else
         gitPush -ssf
       fi
-      NEW_PR_URL=$(gh pr create --repo "brianchandotcom/$REPO" --title "$PR_TITLE" --body "$PR_MESSAGE" | tail -1)
+      NEW_PR_URL=$(gh pr create --repo "brianchandotcom/$CURRENT_REPO" --base "$PR_BRANCH" --title "$PR_TITLE" --body "$PR_MESSAGE" | tail -1)
+      NEW_PR_NUMBER=${NEW_PR_URL##*/}
+
+      gh issue comment "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" --body "See ${NEW_PR_URL}"
+      gh issue comment "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" --body "ci:close"
+      gh issue comment "$NEW_PR_NUMBER" --repo "brianchandotcom/$CURRENT_REPO" --body "Validation is done at https://github.com/${FROM_USER}/${CURRENT_REPO}/pull/${PR_NUMBER_TO_BCHAN}"
+
       unset PR_NUMBER_TO_BCHAN
       open "$NEW_PR_URL"
     else
