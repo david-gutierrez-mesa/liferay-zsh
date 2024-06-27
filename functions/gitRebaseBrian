@@ -1,6 +1,11 @@
 function gitRebaseBrian() {
+    local LOCAL_BRANCH='master'
     while [ "$1" != "" ]; do
     case $1 in
+    -br)
+      shift
+      LOCAL_BRANCH="$1"
+      ;;
     -h | -help)
       _showHelp "$0"
       return 0
@@ -14,7 +19,7 @@ function gitRebaseBrian() {
     shift
   done
   if isThisALiferayRepo; then
-   git rebase brianchandotcom/master
+   git rebase brianchandotcom/"${LOCAL_BRANCH}"
   else
      echo "This is not a liferay-portal. You can not rebase from Brian's origin here"
   fi
@@ -23,10 +28,11 @@ function gitRebaseBrian() {
 _showHelp() {
   echo "Function help:"
   echo "This function runs:"
-  echo "  git rebase brianchandotcom/master "
+  echo "  git rebase brianchandotcom/{branch} "
   echo "$1 [options]"
   echo " "
   echo "options:"
+  echo "-br,              Branch to rebase from Brian's. If not set then master is used".
   echo "-h | -help,       Show brief help"
 }
 
