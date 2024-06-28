@@ -1,0 +1,57 @@
+function gitGetPRDestinationBranch() {
+  local pullRequest
+  local username
+
+  while [ "$1" != "" ]; do
+    case $1 in
+    -h | -help)
+      _showHelp "$0"
+      return 0
+      ;;
+    -pr)
+      shift
+      pullRequest="$1"
+      ;;
+    -u)
+      shift
+      username="$1"
+      ;;
+    *)
+      echo "Invalid option"
+      _showHelp "$0"
+      return 0
+      ;;
+    esac
+    shift
+  done
+
+  if [ -z "$pullRequest" ]; then
+    echo "Add a Pull request to get the message"
+    echo " "
+    _showHelp "$0"
+  else
+    local FROM_USER
+    if [ -z "$username" ]; then
+      FROM_USER=$GITHUB_USER
+    else
+      FROM_USER=$username
+    fi
+    local PR_DESTINATION_BRANCH
+    local CURRENT_REPO
+    CURRENT_REPO=$(gitGetCurrentRepo)
+    PR_DESTINATION_BRANCH=$(gh pr view "$pullRequest" --repo "$FROM_USER"/"$CURRENT_REPO" --json baseRefName --template '{{.baseRefName}}' | awk '{print }')
+    echo "$PR_DESTINATION_BRANCH"
+  fi
+}
+
+_showHelp() {
+  echo "Function help:"
+  echo "$1 [options]"
+  echo " "
+  echo "options:"
+  echo "-h | -help,           Show brief help"
+  echo "-pr,                  Pull request number to get the destination branch. Mandatory"
+  echo "-u,                   User to get the PR from. If not set then $GITHUB_USER is used "
+}
+
+gitGetPRDestinationBranch "$@"

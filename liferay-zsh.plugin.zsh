@@ -38,11 +38,13 @@ if [ -z "$JAVA_HOME" ]; then
 fi
 
 # LIFERAY
-export REPO="liferay-portal"
+export LIFERAY_GITHUB_USER="liferay"
 export PATH_TO_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal"
 export PATH_TO_DXP_PORTAL="$PATH_TO_LIFERAY_MAIN/liferay-portal-ee"
 export PATH_TO_BUNDLES="$PATH_TO_LIFERAY_MAIN/bundles"
 export PORTAL_DATABASE_NAME="lportal"
+export REPO="liferay-portal"
+export REPO_DXP="liferay-portal-ee"
 
 #Poshi automation
 export CHROMIUM_DOWNLOAD_PATH="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Mac%2F800208%2Fchrome-mac.zip?generation=1597949046060527&alt=media"
