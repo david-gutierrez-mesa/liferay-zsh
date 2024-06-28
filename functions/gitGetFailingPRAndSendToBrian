@@ -72,11 +72,8 @@ function gitGetFailingPRAndSendToBrian() {
       local PR_TITLE
       local PR_MESSAGE
       PR_TITLE=$(gitGetPRTitle -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
-      if [ "$FROM_USER" = "$GITHUB_USER" ]; then
-        PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
-      else
-        PR_MESSAGE=$(gitGetPRMessageWitSender -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
-      fi
+      PR_MESSAGE=$(gitGetPRMessage -pr "$PR_NUMBER_TO_BCHAN" -u "$FROM_USER")
+
       if [ "$runSF" = "true" ]; then
         gitPush
       else
