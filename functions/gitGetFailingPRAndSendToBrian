@@ -1,6 +1,7 @@
 function gitGetFailingPRAndSendToBrian() {
 
-  local CURRENT_REPO=$(gitGetCurrentRepo)
+  local CURRENT_REPO
+  CURRENT_REPO=$(gitGetCurrentRepo)
   local FROM_USER=$GITHUB_USER
   local PR_NUMBER_TO_BCHAN
   local runSF="false"
