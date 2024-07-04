@@ -82,6 +82,8 @@ function gitGetFailingPRAndSendToBrian() {
       NEW_PR_URL=$(gh pr create --repo "brianchandotcom/$CURRENT_REPO" --base "$PR_BRANCH" --title "$PR_TITLE" --body "$PR_MESSAGE" | tail -1)
       NEW_PR_NUMBER=${NEW_PR_URL##*/}
 
+      gh issue comment "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" --body "Failing tests are not related to the changes. It's safe to send to BChan."
+      gh issue edit "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" --add-label "passed_review" --remove-label "failed_review,waiting_for_dev"
       gh issue comment "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" --body "See ${NEW_PR_URL}"
       gh issue comment "$PR_NUMBER_TO_BCHAN" --repo "$FROM_USER"/"$CURRENT_REPO" --body "ci:close"
       gh issue comment "$NEW_PR_NUMBER" --repo "brianchandotcom/$CURRENT_REPO" --body "Validation is done at https://github.com/${FROM_USER}/${CURRENT_REPO}/pull/${PR_NUMBER_TO_BCHAN}"
